@@ -3,7 +3,7 @@ var dagreD3=require('dagre-d3');
 var request=require('request');
 
 
-request('http://localhost/~biocmd/ontograph/gene_onto3.json', function(err,res,body) {
+request('http://localhost/~biocmd/ontograph/gene_ontology.json', function(err,res,body) {
     var graph=JSON.parse(body);
     // Create the input graph
     console.log(graph);
