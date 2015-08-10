@@ -1,0 +1,19 @@
+{
+  "name": "ontograph",
+  "version": "1.0.0",
+  "description": "ontology grapher",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "ontology",
+    "bioinformatics"
+  ],
+  "author": "Colin Diesh",
+  "license": "ISC",
+  "devDependencies": {
+    "d3": "^3.5.6",
+    "dagre-d3": "^0.4.10"
+  }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ontograph</title>
+</head>
+<body>
+<h1>Dagre D3 Demo: Sentence Tokenization</h1>
+
+<style id="css">
+/* This sets the color for "TK" nodes to a light blue green. */
+g.type-TK > rect {
+  fill: #00ffd0;
+}
+
+text {
+  font-weight: 300;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  font-size: 14px;
+}
+
+.node rect {
+  stroke: #999;
+  fill: #fff;
+  stroke-width: 1.5px;
+}
+
+.edgePath path {
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+</style>
+
+<svg id="svg-canvas" width=960 height=600></svg>
+
+<p>An example of visualizing the tokenization of a sentence. This example shows
+how CSS classes can be applied to a rendered graph.</p>
+<script id="js" charset="UTF-8" type="text/javascript" src="js/index.js"></script>
+</body>
+</html>
