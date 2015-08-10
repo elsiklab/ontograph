@@ -1,3 +1,6 @@
+set -e
+set -u
+set -v
 rm -rf dist
 mkdir -p dist/js
 mkdir -p dist/css
