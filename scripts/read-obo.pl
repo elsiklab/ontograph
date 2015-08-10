@@ -13,10 +13,10 @@ my $graph = $parser->handler->graph;
 $graph->iterate(sub {
 	my $ni=shift;
 	if($ni->{'term'}->{'is_root'} && !$ni->{'term'}->{'is_obsolete'} && !$ni->{'term'}->{'is_relationship_type'}) {
-		print "{ id: '".$ni->{'term'}->{'acc'}."', name:'".$ni->{'term'}->{'name'}."' },\n";
+		print "{ \"id\": \"".qq($ni->{'term'}->{'acc'})."\", \"name\":\"".qq($ni->{'term'}->{'name'})."\" },\n";
 	}
 	if(!$ni->{'term'}->{'is_root'} && !$ni->{'term'}->{'is_obsolete'} && !$ni->{'term'}->{'is_relationship_type'}) {
-		print "{ id: '".$ni->{'term'}->{'acc'}."', name:'".$ni->{'term'}->{'name'}."', parent: '".$ni->{'parent_rel'}->{'acc1'}."' },\n";
+		print "{ \"id\": \"".qq($ni->{'term'}->{'acc'})."\", \"name\":'".qq($ni->{'term'}->{'name'}."\", parent: \"".$ni->{'parent_rel'}->{'acc1'})."\" },\n";
 	}
 });
 
