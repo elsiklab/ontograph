@@ -47,10 +47,6 @@ request('http://localhost/~biocmd/ontograph/gene_ontology.json', function(err,re
     var styleTooltip = function(name, description) {
           return "<p class='name'>" + name + "</p><p class='description'>" + description + "</p>";
     };
-    inner.selectAll("g.node")
-      .attr("title", function(v) { return styleTooltip(v, g.node(v).description) })
-      .each(function(v) { $(this).tipsy({ gravity: "w", opacity: 1, html: true }); });
-
 
 
     // Create the renderer
@@ -58,6 +54,12 @@ request('http://localhost/~biocmd/ontograph/gene_ontology.json', function(err,re
 
     // Run the renderer. This is what draws the final graph.
     render(inner, g);
+
+
+    inner.selectAll("g.node")
+      .attr("title", function(v) { return styleTooltip(v, g.node(v).description) })
+      .each(function(v) { $(this).tipsy({ gravity: "w", opacity: 1, html: true }); });
+
 
     // Center the graph
     var initialScale = 0.75;

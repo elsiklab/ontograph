@@ -18,22 +18,22 @@ my @arr;
 
 $graph->iterate(sub {
 	my $ni=shift;
-	if($ni->{'term'}->{'is_root'} &&
-      !$ni->{'term'}->{'is_obsolete'} &&
-      !$ni->{'term'}->{'is_relationship_type'})
+	if($ni->{term}->{is_root} &&
+      !$ni->{term}->{is_obsolete} &&
+      !$ni->{term}->{is_relationship_type})
     {
-		$output->{id}=$ni->{'term'}->{'acc'};
-        $output->{label}=$ni->{'term'}->{'name'};
+		$output->{label}=$ni->{term}->{acc};
+        $output->{description}=$ni->{term}->{name};
         push(@arr,$output);
         $output={};
 	}
-	if(!$ni->{'term'}->{'is_root'} &&
-       !$ni->{'term'}->{'is_obsolete'} &&
-       !$ni->{'term'}->{'is_relationship_type'})
+	if(!$ni->{term}->{is_root} &&
+       !$ni->{term}->{is_obsolete} &&
+       !$ni->{term}->{is_relationship_type})
     {
-        $output->{id}=$ni->{'term'}->{'acc'};
-        $output->{label}=$ni->{'term'}->{'name'};
-        $output->{parent}=$ni->{'parent_rel'}->{'acc1'};
+        $output->{label}=$ni->{term}->{acc};
+        $output->{description}=$ni->{term}->{name};
+        $output->{parent}=$ni->{parent_rel}->{acc1};
         push(@arr,$output);
         $output={};
 	}
