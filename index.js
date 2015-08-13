@@ -15,7 +15,7 @@ request('http://localhost/~biocmd/ontograph/gene_ontology.json', function(err,re
 
     for(var i=0; i<graph.length; i++) {
         var node=graph[i];
-        g.setNode(node.id, node);
+        g.setNode(node.label, node);
         if(i>25) break;
     }
     
@@ -23,7 +23,7 @@ request('http://localhost/~biocmd/ontograph/gene_ontology.json', function(err,re
     for(var i=0; i<graph.length; i++) {
         var node=graph[i];
         if(node.parent) {
-            g.setEdge(node.id,node.parent);
+            g.setEdge(node.label,node.parent);
         }
         if(i>25) break;
     }
@@ -41,6 +41,16 @@ request('http://localhost/~biocmd/ontograph/gene_ontology.json', function(err,re
                                   "scale(" + d3.event.scale + ")");
     });
     svg.call(zoom);
+
+
+    // Simple function to style the tooltip for the given node.
+    var styleTooltip = function(name, description) {
+          return "<p class='name'>" + name + "</p><p class='description'>" + description + "</p>";
+    };
+    inner.selectAll("g.node")
+      .attr("title", function(v) { return styleTooltip(v, g.node(v).description) })
+      .each(function(v) { $(this).tipsy({ gravity: "w", opacity: 1, html: true }); });
+
 
 
     // Create the renderer
