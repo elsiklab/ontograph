@@ -10,21 +10,31 @@
 <link rel="stylesheet" href="css/tipsy.css">
 
 <style id="css">
-
-
-.node rect {
-  stroke: #333;
-  fill: #fff;
+/* This sets the color for "TK" nodes to a light blue green. */
+g.type-TK > rect {
+  fill: #00ffd0;
 }
 
-.edgePath path {
-  stroke: #333;
-  fill: #333;
+text {
+  font-weight: 300;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  font-size: 14px;
+}
+
+.node rect {
+  stroke: #999;
+  fill: #fff;
   stroke-width: 1.5px;
 }
 
 .node text {
   pointer-events: none;
+}
+
+
+.edgePath path {
+  stroke: #333;
+  stroke-width: 1.5px;
 }
 
 /* This styles the title of the tooltip */

@@ -1,10 +1,9 @@
 var d3=require('d3');
 var dagreD3=require('dagre-d3');
-var request=require('request');
 
 
-$.ajax('gene_ontology.json', function(err,res,body) {
-    var graph=JSON.parse(body);
+$.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(graph) {
+    console.log(graph);
     // Create the input graph
     var g = new dagreD3.graphlib.Graph()
       .setGraph({})
