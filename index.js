@@ -21,8 +21,8 @@ $.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(graph) {
 
     for(var i=0; i<graph.length; i++) {
         var node=graph[i];
-        if(node.parent) {
-            g.setEdge(node.label,node.parent);
+        for(var parent in node.parents) {
+            g.setEdge(node.label,parent);
         }
         if(i>25) break;
     }
