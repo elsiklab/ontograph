@@ -13,7 +13,7 @@ $parser->parse($ARGV[0]);
 
 my $graph = $parser->handler->graph;
 
-my @arr;
+my $output_graph = {};
 
 $graph->iterate(sub {
     my $ni=shift;
@@ -24,23 +24,20 @@ $graph->iterate(sub {
     {
         $output->{label}=$ni->{term}->{acc};
         $output->{description}=$ni->{term}->{name};
-        push(@arr,$output);
+        $output_graph->{$ni->{term}->{acc}}=$output;
     }
     if(!$ni->{term}->{is_root} &&
        !$ni->{term}->{is_obsolete} &&
        !$ni->{term}->{is_relationship_type})
     {
-        my @parent_terms;
         my $term_lref = $graph->get_parent_terms($ni->{term}->{acc});
+        my @parent_terms = map { $_->{acc} } @$term_lref;
+        $output->{parents}=\@parent_terms;
         $output->{label}=$ni->{term}->{acc};
         $output->{description}=$ni->{term}->{name};
-        foreach my $term (@$term_lref) {
-           push(@parent_terms, $term->{acc}); 
-        }
-        $output->{parents}=\@parent_terms;
-        push(@arr,$output);
+        $output_graph->{$ni->{term}->{acc}}=$output;
     }
 });
 
-print $json->encode(\@arr) . "\n";
+print $json->encode($output_graph) . "\n";
 
