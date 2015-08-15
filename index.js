@@ -1,7 +1,7 @@
 var d3=require('d3');
 var dagreD3=require('dagre-d3');
 
-var depth_limit=6;
+var depth_limit=10;
 var nodes=[];
 function process_parents(d3g, graph, term, depth) {
     var node = graph[term];
@@ -50,6 +50,13 @@ function process_parents_edges(d3g, graph, term, depth) {
     }
 }
 
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 
 $.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(graph) {
     // Create the input graph
@@ -57,7 +64,7 @@ $.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(graph) {
       .setGraph({})
       .setDefaultEdgeLabel(function() { return {}; });
 
-    var term="GO:0010458";
+    var term=getParameterByName('term')||"GO:0010458";
     process_parents(g,graph,term,0);
     process_parents_edges(g,graph,term,0);
 
