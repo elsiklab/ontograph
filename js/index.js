@@ -2,7 +2,7 @@
 var d3=require('d3');
 var dagreD3=require('dagre-d3');
 
-var depth_limit=6;
+var depth_limit=10;
 var nodes=[];
 function process_parents(d3g, graph, term, depth) {
     var node = graph[term];
@@ -52,18 +52,51 @@ function process_parents_edges(d3g, graph, term, depth) {
 }
 
 
-$.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(graph) {
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+
+// check query params
+var param=getParameterByName('term');
+if(param) {
+    $('#term').val(param);
+}
+
+
+var graph;
+$.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(response) {
+    graph = response;
+    var term = $('#term').val();
+    $("#loading").text("");
+    setup_graph(term);
+});
+
+
+$("form").submit(function() {
+    var term = $('#term').val();
+    setup_graph(term);
+    return false;
+});
+
+
+
+function setup_graph(term) {
     // Create the input graph
+    $("#svg-canvas").empty();
     var g = new dagreD3.graphlib.Graph()
       .setGraph({})
       .setDefaultEdgeLabel(function() { return {}; });
 
-    var term="GO:0010458";
     process_parents(g,graph,term,0);
     process_parents_edges(g,graph,term,0);
 
     // Create the renderer
     var render = new dagreD3.render();
+
 
     // Set up an SVG group so that we can translate the final graph.
     var svg = d3.select("svg"),
@@ -104,7 +137,7 @@ $.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(graph) {
     svg.attr('height', g.graph().height * initialScale + 40);
    
 
-});
+};
 
 
 
