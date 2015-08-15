@@ -50,6 +50,7 @@ function process_parents_edges(d3g, graph, term, depth) {
     }
 }
 
+
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -58,18 +59,43 @@ function getParameterByName(name) {
 }
 
 
-$.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(graph) {
+// check query params
+var param=getParameterByName('term');
+if(param) {
+    $('#term').val(param);
+}
+
+
+var graph;
+$.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(response) {
+    graph = response;
+    var term = $('#term').val();
+    $("#loading").text("");
+    setup_graph(term);
+});
+
+
+$("form").submit(function() {
+    var term = $('#term').val();
+    setup_graph(term);
+    return false;
+});
+
+
+
+function setup_graph(term) {
     // Create the input graph
+    $("#svg-canvas").empty();
     var g = new dagreD3.graphlib.Graph()
       .setGraph({})
       .setDefaultEdgeLabel(function() { return {}; });
 
-    var term=getParameterByName('term')||"GO:0010458";
     process_parents(g,graph,term,0);
     process_parents_edges(g,graph,term,0);
 
     // Create the renderer
     var render = new dagreD3.render();
+
 
     // Set up an SVG group so that we can translate the final graph.
     var svg = d3.select("svg"),
@@ -110,6 +136,6 @@ $.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(graph) {
     svg.attr('height', g.graph().height * initialScale + 40);
    
 
-});
+};
 
 
