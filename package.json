@@ -17,7 +17,9 @@
   "author": "Colin Diesh",
   "license": "ISC",
   "devDependencies": {
+    "bbop": "^2.3.2",
     "d3": "^3.5.6",
-    "dagre-d3": "^0.4.10"
+    "dagre-d3": "^0.4.10",
+    "imjs": "^3.14.0"
   }
 }
