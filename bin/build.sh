@@ -7,6 +7,7 @@ mkdir -p dist/css
 cp index.html dist/
 cp tipsy.css dist/css/
 cp tipsy.js dist/js/
+cp jquery-1.11.3.js dist/js/
 cp custom.css dist/css/
 [ -f go.obo ] || wget http://www.geneontology.org/ontology/go.obo
 [ -f gene_ontology.json ] || perl scripts/read-obo.pl go.obo > gene_ontology.json
