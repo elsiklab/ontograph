@@ -1,24 +1,19 @@
 var d3=require('d3');
 var dagreD3=require('dagre-d3');
 
-var depth_limit=10;
+var depth_limit=20;
 var nodes=[];
 function process_parents(d3g, graph, term, depth) {
     var node = graph[term];
     if(!node) {
-        console.log("term not found: "+ term);
         return;
     }
     if(!nodes[node.label]) {
         d3g.setNode(node.label, node);
         nodes[node.label]=true;
     }
-    else {
-        console.log("node already added: "+nodes[node.label]);
-    }
     if(node.parents) {
         for(var i=0; i<node.parents.length; i++) {
-            console.log("parent: "+node.parents[i]+" depth: "+depth);
             if(depth<depth_limit) {
                 process_parents(d3g, graph, node.parents[i],depth+1);
             }
@@ -31,20 +26,17 @@ var edges=[];
 function process_parents_edges(d3g, graph, term, depth) {
     var node = graph[term];
     if(!node) {
-        console.log("term not found: "+term);
         return;
     }
     if(node.parents) {
         for(var i=0; i<node.parents.length; i++) {
-            console.log(node.label, node.parents[i]);
             if(!edges[node.label+","+node.parents[i]]) {
                 d3g.setEdge(node.label, node.parents[i]);
                 edges[node.label+","+node.parents[i]]=true;
-            }
-            else { console.log("edge already added: "+edges[node.label+","+node.parents[i]]); }
 
-            if(depth<depth_limit) {
-                process_parents_edges(d3g, graph, node.parents[i],depth+1);
+                if(depth<depth_limit) {
+                    process_parents_edges(d3g, graph, node.parents[i],depth+1);
+                }
             }
         }
     }
@@ -77,6 +69,8 @@ $.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(response) {
 
 $("form").submit(function() {
     var term = $('#term').val();
+    console.log("term="+term);
+    window.location.search="term="+term;
     setup_graph(term);
     return false;
 });
@@ -88,7 +82,8 @@ function setup_graph(term) {
     $("#svg-canvas").empty();
     var g = new dagreD3.graphlib.Graph()
       .setGraph({})
-      .setDefaultEdgeLabel(function() { return {}; });
+      .setDefaultEdgeLabel(function() { return {}; })
+      .setDefaultNodeLabel(function() { return {}; });
 
     process_parents(g,graph,term,0);
     process_parents_edges(g,graph,term,0);
@@ -134,8 +129,4 @@ function setup_graph(term) {
       .scale(initialScale)
       .event(svg);
     svg.attr('height', g.graph().height * initialScale + 40);
-   
-
-};
-
-
+}
