@@ -13,7 +13,6 @@ text {
   stroke: #999;
   fill: #fff;
   stroke-width: 1.5px;
-  text-anchor: middle;
 }
 
 .node text {
