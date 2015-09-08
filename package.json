@@ -17,9 +17,10 @@
   "author": "Colin Diesh",
   "license": "ISC",
   "devDependencies": {
-    "bbop": "^2.3.2",
-    "d3": "^3.5.6",
+    "gulp-browserify": "^0.5.1"
+  },
+  "dependencies": {
     "dagre-d3": "^0.4.10",
-    "imjs": "^3.14.0"
+    "d3": "^3.5.6"
   }
 }

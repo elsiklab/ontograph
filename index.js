@@ -1,6 +1,6 @@
 var d3=require('d3');
 var dagreD3=require('dagre-d3');
-var utils=require('./util.js');
+var utils=require('./js/util.js');
 
 
 var depth_limit=20;
