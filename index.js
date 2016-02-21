@@ -16,6 +16,7 @@ function process_parents(cy, graph, term, depth) {
         return;
     }
     if(!nodes_cy[node.label]) {
+       console.log(utils.explode(node.description, 20));
         nodes_cy[node.label]={
             data: {
                 id: node.label,
@@ -72,13 +73,26 @@ function setup_graph(graph, term) {
             .style({
                 'content': 'data(label)',
                 'text-valign': 'center',
-                'text-outline-width': 2,
-                'text-outline-color': '#000',
-                'color': '#fff'
+                'color': '#000',
+                'background-color': '#fff',
+                'border-color': '#333',
+                'border-width': '1px',
+                'shape': 'rectangle',
+                'text-max-width': '1000px',
+                'text-wrap': 'wrap',
+                'width': 'label',
+                'padding-left': '9px',
+                'padding-bottom': '9px',
+                'padding-right': '9px',
+                'padding-top': '9px',
+                'height': 'label'
             })
         .selector('edge')
             .css({
-                'target-arrow-shape': 'triangle'
+                'target-arrow-shape': 'triangle',
+                'target-arrow-fill': '#333',
+                'target-arrow-color': '#333',
+                'line-color': '#333'
             });
 
     process_parents(cy,graph,term,0);
@@ -92,13 +106,14 @@ function setup_graph(graph, term) {
         }
     });
     cy.elements().qtip({
-        content: function(arg){ console.log(this.data('label')); return '<b>'+this.data('id')+'</b><br />'+this.data('label'); },
+        content: function(arg){ return '<b>'+this.data('id')+'</b><br />'+this.data('label'); },
         position: {
             my: 'top center',
             at: 'bottom center'
         },
         style: {
             classes: 'qtip-bootstrap',
+            'font-family': 'sans-serif',
             tip: {
                 width: 16,
                 height: 8
