@@ -1,16 +1,6 @@
 
 module.exports = {
 
-    // array filter
-    filter: function(array, fn) {
-      var results = [];
-      var item;
-      for (var i = 0, len = array.length; i < len; i++) {
-        item = array[i];
-        if (fn(item)) results.push(item);
-      }
-      return results;
-    },
     // string explode
     explode: function(text, max) {    
         text = text.replace(/  +/g, " ").replace(/^ /, "").replace(/ $/, "");    
