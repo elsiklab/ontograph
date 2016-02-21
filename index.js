@@ -124,7 +124,7 @@ function setup_graph(graph, term) {
     //manually crate and stop layout after timeout
     var layout_cy=cy.makeLayout({
         name: 'dagre',
-        padding: 10,
+        padding: 50,
         randomize: true,
         animate: true,
         infinite: true,
