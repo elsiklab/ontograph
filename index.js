@@ -16,7 +16,6 @@ function process_parents(cy, graph, term, depth) {
         return;
     }
     if(!nodes_cy[node.label]) {
-       console.log(utils.explode(node.description, 20));
         nodes_cy[node.label]={
             data: {
                 id: node.label,
@@ -139,9 +138,14 @@ domready(function(){
     cydagre(cytoscape, dagre); // register extension 
     cyqtip( cytoscape, $ ); // register extension
     var graph;
-    $.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(response) {
+    var ontology;
+    var term = $('#term').val();
+    if(term.match(/^ECO:/)) { ontology="evidence_ontology.json"; }
+    else if(term.match(/^GO:/)) { ontology="gene_ontology.json"; }
+    else if(term.match(/^SO:/)) { ontology="sequence_ontology.json"; }
+    console.log(ontology);
+    $.ajax({url: ontology, dataType: 'json'}).done(function(response) {
         graph = response;
-        var term = $('#term').val();
         $("#loading").text("");
         setup_graph(graph, term);
     });
@@ -149,7 +153,6 @@ domready(function(){
 
     $("form").submit(function() {
         var term = $('#term').val();
-        console.log("term="+term);
         window.location.search = "term="+term;
         setup_graph(graph, term);
         return false;

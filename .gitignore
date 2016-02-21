@@ -1,4 +1,3 @@
 node_modules
-go.obo
-go.cache
-gene_ontology.json
+*.obo
+*.cache

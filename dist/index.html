@@ -8,9 +8,10 @@
   <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.js"></script>
   <style>body { padding: 5px; }</style>
+
 </head>
 <body>
-<h1>Ontograph: A Gene Ontology viewer</h1>
+<h1>Ontograph: An ontology viewer</h1>
 
 <p id="loading">Loading ...</p>
 <div id="cy" style="position: relative;border: 1px solid black; width: 1200px; height: 800px;"></div>
@@ -19,12 +20,13 @@
 
 
 <form>
-<label>GO term:</label>
+<label>Enter ontology term:</label>
 <input type="text" id="term" value="GO:0070062"></input>
 <input type="submit"></input>
 </form>
 
-<br />
+<p>Currently, evidence ontology (e.g. ECO:0000303), gene ontology (e.g. GO:0070060), and sequence ontology (e.g. SO:0001217) are supported</p>
+
 <a href="https://github.com/cmdcolin/ontograph">Github</a>
 
 <script id="js" charset="UTF-8" type="text/javascript" src="index.js"></script>
