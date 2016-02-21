@@ -1,4 +1,3 @@
-var d3=require('d3');
 var dagre=require('dagre');
 var cytoscape=require('cytoscape');
 var cydagre=require('cytoscape-dagre');

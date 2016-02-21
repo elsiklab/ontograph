@@ -23,10 +23,8 @@
     "cytoscape": "^2.6.4",
     "cytoscape-dagre": "^1.2.0",
     "cytoscape-qtip": "^2.3.0",
-    "d3": "^3.5.6",
-    "dagre-d3": "^0.4.10",
+    "dagre": "^0.7.4",
     "domready": "^1.0.8",
-    "jquery": "^2.2.0",
     "underscore": "^1.8.3"
   }
 }
