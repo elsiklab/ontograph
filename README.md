@@ -1,6 +1,6 @@
 # Ontograph
 
-An ontology based DAG graph using dagre-d3 inspired by BioJS DAGViewer
+An ontology based DAG graph using cytoscape.js and the dagre layout, inspired by BioJS DAGViewer
 
 
 ## Installation
@@ -16,3 +16,4 @@ This will download go.obo, convert to JSON, compile app, and output to dist fold
 ## Demo
 
 A demo is deployed live at http://cmdcolin.github.io/ontograph/
+
