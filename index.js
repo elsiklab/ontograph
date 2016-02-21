@@ -15,10 +15,10 @@ function process_parents(cy, graph, term, depth) {
     if(!node) {
         return;
     }
-    if(!nodes_cy[node.label]) {
-        nodes_cy[node.label]={
+    if(!nodes_cy[term]) {
+        nodes_cy[term]={
             data: {
-                id: node.label,
+                id: term,
                 label: utils.explode(node.description, 20)
             }
         };
@@ -26,7 +26,7 @@ function process_parents(cy, graph, term, depth) {
     if(node.parents) {
         for(var i=0; i<node.parents.length; i++) {
             if(depth<depth_limit) {
-                process_parents(cy, graph, node.parents[i],depth+1);
+                process_parents(cy, graph, node.parents[i], depth+1);
             }
         }
     }
@@ -41,16 +41,16 @@ function process_parents_edges(cy, graph, term, depth) {
     }
     if(node.parents) {
         for(var i=0; i<node.parents.length; i++) {
-            if(!edges_cy[node.label+","+node.parents[i]]) {
-                edges_cy[node.label+","+node.parents[i]] = {
+            if(!edges_cy[term+","+node.parents[i]]) {
+                edges_cy[term+","+node.parents[i]] = {
                     data: {
-                        id: node.label+","+node.parents[i],
+                        id: term+","+node.parents[i],
                         source: node.parents[i],
-                        target: node.label
+                        target: term
                     }
                 };
                 if(depth<depth_limit) {
-                    process_parents_edges(cy, graph, node.parents[i],depth+1);
+                    process_parents_edges(cy, graph, node.parents[i], depth+1);
                 }
             }
         }
@@ -97,7 +97,7 @@ function setup_graph(graph, term) {
     process_parents(cy,graph,term,0);
     process_parents_edges(cy,graph,term,0);
     var cy=cytoscape({
-        container: document.getElementById('cy'),
+        container: $('#cy'),
         style: stylesheet_cy,
         elements: {
             nodes: _.values(nodes_cy),
@@ -143,12 +143,17 @@ domready(function(){
     if(term.match(/^ECO:/)) { ontology="evidence_ontology.json"; }
     else if(term.match(/^GO:/)) { ontology="gene_ontology.json"; }
     else if(term.match(/^SO:/)) { ontology="sequence_ontology.json"; }
-    console.log(ontology);
-    $.ajax({url: ontology, dataType: 'json'}).done(function(response) {
-        graph = response;
-        $("#loading").text("");
-        setup_graph(graph, term);
-    });
+    else if(term.match(/^CHEBI:/)) { ontology="chebi.json"; }
+    if(!ontology) {
+        $("#loading").text("Error: ontology not found for "+term);
+    }
+    else {
+        $.ajax({url: ontology, dataType: 'json'}).done(function(response) {
+            graph = response;
+            $("#loading").text("");
+            setup_graph(graph, term);
+        });
+    }
 
 
     $("form").submit(function() {

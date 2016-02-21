@@ -24,7 +24,6 @@ $graph->iterate(sub {
       !$ni->{term}->{is_obsolete} &&
       !$ni->{term}->{is_relationship_type})
     {
-        $output->{label}=$ni->{term}->{acc};
         $output->{description}=$ni->{term}->{name};
         $output_graph->{$ni->{term}->{acc}}=$output;
     }
@@ -35,7 +34,6 @@ $graph->iterate(sub {
         my $term_lref = $graph->get_parent_terms($ni->{term}->{acc});
         my @parent_terms = map { $_->{acc} } @$term_lref;
         $output->{parents}=\@parent_terms;
-        $output->{label}=$ni->{term}->{acc};
         $output->{description}=$ni->{term}->{name};
         $output_graph->{$ni->{term}->{acc}}=$output;
     }
