@@ -1,8 +1,8 @@
 var d3=require('d3');
-var $=require('jquery');
 var dagre=require('dagre');
 var cytoscape=require('cytoscape');
 var cydagre=require('cytoscape-dagre');
+var cyqtip=require('cytoscape-qtip');
 var domready=require('domready');
 var _=require('underscore');
 var utils=require('./js/util.js');
@@ -92,6 +92,20 @@ function setup_graph(graph, term) {
             edges: _.values(edges_cy)
         }
     });
+    cy.elements().qtip({
+        content: function(arg){ console.log(this.data('label')); return '<b>'+this.data('id')+'</b><br />'+this.data('label'); },
+        position: {
+            my: 'top center',
+            at: 'bottom center'
+        },
+        style: {
+            classes: 'qtip-bootstrap',
+            tip: {
+                width: 16,
+                height: 8
+            }
+        }
+    });
 
     //manually crate and stop layout after timeout
     var layout_cy=cy.makeLayout({
@@ -109,6 +123,7 @@ function setup_graph(graph, term) {
 
 domready(function(){
     cydagre(cytoscape, dagre); // register extension 
+    cyqtip( cytoscape, $ ); // register extension
     var graph;
     $.ajax({url: 'gene_ontology.json', dataType: 'json'}).done(function(response) {
         graph = response;
