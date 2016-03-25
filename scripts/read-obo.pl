@@ -7,8 +7,6 @@ use Data::Dumper;
 use GO::Parser;
 use JSON;
 
-my $json = JSON->new;
-
 my $parser = new GO::Parser({handler=>'obj',use_cache=>1});
 
 $parser->parse($ARGV[0]);
@@ -39,5 +37,5 @@ $graph->iterate(sub {
     }
 });
 
-print $json->encode($output_graph) . "\n";
+print to_json($output_graph, {allow_blessed => 1}) . "\n";
 

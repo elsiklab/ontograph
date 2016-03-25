@@ -131,7 +131,6 @@ function setup_graph(graph, term) {
     });
 
     layout_cy.run();
-    
 }
 
 domready(function(){
@@ -144,6 +143,8 @@ domready(function(){
     else if(term.match(/^GO:/)) { ontology="gene_ontology.json"; }
     else if(term.match(/^SO:/)) { ontology="sequence_ontology.json"; }
     else if(term.match(/^CHEBI:/)) { ontology="chebi.json"; }
+    else if(term.match(/^CHEBI:/)) { ontology="chebi.json"; }
+    else if(term.match(/^HP:/)) { ontology="hp.json"; }
     if(!ontology) {
         $("#loading").text("Error: ontology not found for "+term);
     }
