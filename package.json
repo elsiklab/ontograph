@@ -17,7 +17,11 @@
   "author": "Colin Diesh",
   "license": "ISC",
   "devDependencies": {
-    "gulp-browserify": "^0.5.1"
+    "gulp": "^3.9.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.3"
   },
   "dependencies": {
     "cytoscape": "^2.6.4",
