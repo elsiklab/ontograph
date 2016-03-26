@@ -5,9 +5,18 @@
 
 
   <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.js"></script>
-  <style>body { padding: 5px; }</style>
+  <style>
+      body {
+          padding: 5px;
+      }
+      .ui-widget {
+          font-size: 62.5%;
+      }
+  </style>
 
 </head>
 <body>
@@ -17,11 +26,18 @@
 <div id="legend" style="float:right"></div>
 <div id="cy" style="position: relative;border: 1px solid black; width: 1200px; height: 800px;"></div>
 
-<form>
-<label>Enter ontology term:</label>
+<div class="ui-widget">
+<form id="termform">
+<label>Search an ontology term or identifier directly:</label>
 <input type="text" id="term" value="GO:0070060"></input>
 <input type="submit"></input>
 </form>
+<form id="searchform">
+<label>Search for an ontology term from it's description:</label>
+<input type="text" id="search"></input>
+<input type="submit"></input>
+</form>
+</div>
 <button id="save_button">Save PNG</button>
 <div id="output"></div>
 
