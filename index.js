@@ -14,7 +14,7 @@ var colors = {
     "parents": "black",
     "negatively_regulates": "blue",
     "regulates": "green",
-    "postitively_regulates": "orange",
+    "positively_regulates": "orange",
     "has_part": "brown",
     "part_of": "red",
     "occurs_in": "purple"
