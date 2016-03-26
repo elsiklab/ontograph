@@ -1,5 +1,6 @@
 Version 0.3.0
 
+- Added searchbox
 - Added relationship ontology
 - Added human phenotype ontology (HPO)
 

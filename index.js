@@ -258,9 +258,7 @@ function download_and_setup_graph( term ) {
         $.ajax({url: ontology, dataType: 'json'}).done(function(response) {
             graph = response;
             process_graph( graph );
-            console.log(setup);
             if( setup ) {
-                console.log('here');
                 $("#search").autocomplete({source: []});
             }
             $("#search").autocomplete({
