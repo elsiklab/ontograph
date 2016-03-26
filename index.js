@@ -17,7 +17,9 @@ var colors = {
     "positively_regulates": "orange",
     "has_part": "brown",
     "part_of": "red",
-    "occurs_in": "purple"
+    "occurs_in": "magenta",
+    "happens_during": "cyan",
+    "ends_during": "yellow"
 };
 var arr = Object.keys(colors);
 
