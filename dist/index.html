@@ -14,16 +14,17 @@
 <h1>Ontograph: An ontology viewer</h1>
 
 <p id="loading">Loading ...</p>
+<div id="legend" style="float:right"></div>
 <div id="cy" style="position: relative;border: 1px solid black; width: 1200px; height: 800px;"></div>
-
-<p>An example of the parents of a specific GO term</p>
-
 
 <form>
 <label>Enter ontology term:</label>
 <input type="text" id="term" value="GO:0070062"></input>
 <input type="submit"></input>
 </form>
+<button id="save_button">Save PNG</button>
+<div id="output"></div>
+
 
 <p>Currently supported ontologies (with examples):</p>
 <ol>

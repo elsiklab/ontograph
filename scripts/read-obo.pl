@@ -1,9 +1,7 @@
 #!/usr/bin/env perl
 
-use strict;
-use warnings;
-
 use Data::Dumper;
+use List::MoreUtils;
 use GO::Parser;
 use JSON;
 
@@ -31,9 +29,19 @@ $graph->iterate(sub {
     {
         my $term_lref = $graph->get_parent_terms($ni->{term}->{acc});
         my @parent_terms = map { $_->{acc} } @$term_lref;
-        $output->{parents}=\@parent_terms;
-        $output->{description}=$ni->{term}->{name};
-        $output_graph->{$ni->{term}->{acc}}=$output;
+        $output->{parents} = \@parent_terms;
+        $output->{description} = $ni->{term}->{name};
+        my $relationships = $graph->get_relationships($ni->{term}->{acc});
+        foreach (@$relationships) {
+            if($_->{type} && $_->{type} ne "is_a") {
+                if(!$output->{$_->{type}}) {
+                    $output->{$_->{type}} = [];
+                }
+                push(@{$output->{$_->{type}}},$_->{acc1}) unless grep {$_ eq $_->{acc1}} @{$output->{$_->{type}}};
+            }
+        }
+
+        $output_graph->{$ni->{term}->{acc}} = $output;
     }
 });
 
