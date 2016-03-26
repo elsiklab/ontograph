@@ -12,6 +12,15 @@ var depth_limit = 20;
 var nodes_cy = [];
 var edges_cy = [];
 var relationships = [];
+var graph;
+var ontology;
+var setup;
+var cy;
+
+
+var generic_relationships = [
+    "parents"
+];
 
 var go_relationships = [
     "parents",
@@ -65,13 +74,13 @@ var scales = function(elt) {
 };
 
 
-function process_parents(cy, graph, term, depth) {
-    var node = graph[term];
-    if(!node) {
+function process_parents( cy, graph, term, depth ) {
+    var node = graph[ term ];
+    if( !node ) {
         return;
     }
-    if(!nodes_cy[term]) {
-        nodes_cy[term]={
+    if( !nodes_cy[term] ) {
+        nodes_cy[term] = {
             data: {
                 id: term,
                 label: utils.explode(node.description, 20)
@@ -132,16 +141,11 @@ function process_parents_edges(cy, graph, term, depth) {
     });
 }
 
-// check query params
-var param = utils.getParameterByName('term');
-if( param ) {
-    $('#term').val( param );
-}
 
 
-function setup_graph(graph, term) {
+function setup_graph( graph, term ) {
     // Create the input graph
-    var stylesheet_cy=cytoscape.stylesheet()
+    var stylesheet_cy = cytoscape.stylesheet()
         .selector('node')
             .style({
                 'content': 'data(label)',
@@ -168,11 +172,12 @@ function setup_graph(graph, term) {
                 'line-color': function(elt) { return scales(elt.data('label')); },
                 'width': '5px'
             });
-
     process_parents( cy, graph, term, 0 );
     process_parents_edges( cy, graph, term, 0 );
 
-    var cy=cytoscape({
+    if(setup) cy.destroy();
+
+    cy = cytoscape({
         container: $('#cy'),
         style: stylesheet_cy,
         elements: {
@@ -180,6 +185,9 @@ function setup_graph(graph, term) {
             edges: _.values(edges_cy)
         }
     });
+
+    setup = true;
+    
 
 
     cy.elements().qtip({
@@ -215,37 +223,48 @@ function setup_graph(graph, term) {
     });
 }
 
-domready(function(){
-    cydagre(cytoscape, dagre); // register extension
-    cyqtip(cytoscape, $); // register extension
-    var graph;
-    var ontology;
-    var term = $('#term').val();
-    relationships = ["parents"];
-    if(term.match(/^ECO:/)) { ontology="evidence_ontology.json"; }
-    else if(term.match(/^GO:/)) { ontology="gene_ontology.json"; relationships = go_relationships; }
-    else if(term.match(/^SO:/)) { ontology="sequence_ontology.json"; relationships = so_relationships; }
-    else if(term.match(/^CHEBI:/)) { ontology="chebi.json"; relationships = chebi_relationships; }
-    else if(term.match(/^HP:/)) { ontology="hp.json"; }
-    relationships.forEach(function(elt) {
-        $("#legend").append("<div style='height: 12px; width: 50px; background: " + scales(elt)+"'></div><div>"+elt+"</div>");
+function download_and_setup_graph( term ) {
+    var new_ontology;
+    if( term.match(/^ECO:/) ) { new_ontology="evidence_ontology.json"; relationships = generic_relationships; }
+    else if( term.match(/^GO:/) ) { new_ontology="gene_ontology.json"; relationships = go_relationships; }
+    else if( term.match(/^SO:/) ) { new_ontology="sequence_ontology.json"; relationships = so_relationships; }
+    else if( term.match(/^CHEBI:/) ) { new_ontology="chebi.json"; relationships = chebi_relationships; }
+    else if( term.match(/^HP:/) ) { new_ontology="hp.json"; relationships = generic_relationships;  }
+    relationships.forEach( function(elt) {
+        $("#legend").empty().append("<div style='height: 12px; width: 50px; background: " + scales(elt) + "'></div><div>"+elt+"</div>");
     });
-    if(!ontology) {
+    if( !new_ontology ) {
         $("#loading").text("Error: ontology not found for "+term);
     }
-    else {
+    else if( new_ontology != ontology ) {
+        ontology = new_ontology;
         $.ajax({url: ontology, dataType: 'json'}).done(function(response) {
             graph = response;
+            setup_graph( graph, term );
             $("#loading").text("");
-            setup_graph(graph, term);
         });
     }
+    else {
+        setup_graph( graph, term );
+    }
+}
+domready( function(){
+    cydagre( cytoscape, dagre ); // register extension
+    cyqtip( cytoscape, $ ); // register extension
 
+    // check query params
+    var param = utils.getParameterByName('term');
+    if( param ) {
+        $('#term').val( param );
+    }
+    var term = $('#term').val();
+    download_and_setup_graph( term );
 
     $("form").submit(function() {
+        console.log('submit');
         var term = $('#term').val();
-        window.location.search = "term="+term;
-        setup_graph(graph, term);
+        window.history.replaceState( {}, "", "?term="+term );
+        download_and_setup_graph( term );
         return false;
     });
 
