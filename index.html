@@ -44,13 +44,19 @@
 
 <p>Currently supported ontologies (with examples):</p>
 <ol>
-<li><a href="?term=ECO:0000303">ECO:0000303</a> - evidence ontology</li>
-<li><a href="?term=GO:0070060">GO:0070060</a> - gene ontology</li>
-<li><a href="?term=SO:0000281">SO:0000281</a> - sequence ontology</li>
-<li><a href="?term=CHEBI:15377">CHEBI:15377</a> - chemical entities of biological interest</li>
-<li><a href="?term=HP:0004043">HP:0004043</a> - human phenotype ontology</li>
+<li><a href="." class="clink">ECO:0000303</a> - evidence ontology</li>
+<li><a href="." class="clink">GO:0070060</a> - gene ontology</li>
+<li><a href="." class="clink">SO:0000281</a> - sequence ontology</li>
+<li><a href="." class="clink">CHEBI:15377</a> - chemical entities of biological interest</li>
+<li><a href="." class="clink">HP:0004043</a> - human phenotype ontology</li>
 </ol>
-
+<script>
+$("a.clink").click(function (evt) {
+    $("#term").val(evt.target.text);
+    $("form").submit();
+    return false;
+});
+</script>
 <a href="https://github.com/cmdcolin/ontograph">Github</a>
 
 <script src="index.js"></script>
