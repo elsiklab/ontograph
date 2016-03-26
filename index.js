@@ -1,31 +1,65 @@
-var dagre=require('dagre');
-var cytoscape=require('cytoscape');
-var cydagre=require('cytoscape-dagre');
-var cyqtip=require('cytoscape-qtip');
-var domready=require('domready');
-var _=require('underscore');
-var utils=require('./js/util.js');
+var dagre = require('dagre');
+var cytoscape = require('cytoscape');
+var cydagre = require('cytoscape-dagre');
+var cyqtip = require('cytoscape-qtip');
+var domready = require('domready');
+var _ = require('underscore');
+var utils = require('./js/util.js');
+var chroma = require('chroma-js');
 
 
 var depth_limit = 20;
 var nodes_cy = [];
 var edges_cy = [];
-var colors = {
-    "parents": "black",
-    "negatively_regulates": "blue",
-    "regulates": "green",
-    "positively_regulates": "orange",
-    "has_part": "brown",
-    "part_of": "red",
-    "occurs_in": "magenta",
-    "happens_during": "cyan",
-    "ends_during": "yellow"
-};
-var arr = Object.keys(colors);
 
-arr.forEach(function(elt) {
-    $("#legend").append("<div style='height: 12px; width: 50px; background: "+colors[elt]+"'></div><div>"+elt+"</div>");
-});
+var go_colors = [
+    "parents",
+    "has_part",
+    "part_of",
+    "negatively_regulates",
+    "regulates",
+    "positively_regulates",
+    "occurs_in",
+    "happens_during",
+    "ends_during",
+];
+var chebi_colors = [
+    "is_conjugate_base_of",
+    "has_functional_parent",
+    "has_role",
+    "has_part",
+    "has_parent_hydride",
+    "is_conjugate_acid_of",
+    "is_conjugate_base_of",
+    "is_substituent_group_from",
+    "is_enantiomer_of",
+    "is_tautomer_of",
+    "has_parent_hydride",
+    "is_substituent_group_from"
+];
+
+
+var so_colors = [
+    "parents",
+    "has_part",
+    "part_of",
+    "has_quality",
+    "derives_from",
+    "transcribed_to",
+    "transcribed_from",
+    "has_origin",
+    "adjacent_to",
+    "non_functional_homolog_of",
+    "variant_of",
+    "member_of",
+    "contains",
+    "guided_by",
+    "overlaps"
+];
+
+var arr = go_colors.concat(so_colors).concat(chebi_colors);
+var color_palette = _.shuffle(chroma.scale('Set1').colors(40));
+var scales = function(elt) { return elt=="parents"?"#333":color_palette[arr.indexOf(elt)-1]; };
 
 
 function process_parents(cy, graph, term, depth) {
@@ -83,7 +117,7 @@ function process_parents_edges(cy, graph, term, depth) {
                             label: elt,
                             source: node[elt][i],
                             target: term,
-                            type: colors[elt]
+                            type: scales(elt)
                         }
                     };
                     if(depth < depth_limit && elt == "parents") {
@@ -184,11 +218,15 @@ domready(function(){
     var graph;
     var ontology;
     var term = $('#term').val();
+    var legend_colors = [];
     if(term.match(/^ECO:/)) { ontology="evidence_ontology.json"; }
-    else if(term.match(/^GO:/)) { ontology="gene_ontology.json"; }
-    else if(term.match(/^SO:/)) { ontology="sequence_ontology.json"; }
-    else if(term.match(/^CHEBI:/)) { ontology="chebi.json"; }
+    else if(term.match(/^GO:/)) { ontology="gene_ontology.json"; legend_colors = go_colors; }
+    else if(term.match(/^SO:/)) { ontology="sequence_ontology.json"; legend_colors = so_colors; }
+    else if(term.match(/^CHEBI:/)) { ontology="chebi.json"; legend_colors = chebi_colors; }
     else if(term.match(/^HP:/)) { ontology="hp.json"; }
+    Object.keys(legend_colors).forEach(function(elt) {
+        $("#legend").append("<div style='height: 12px; width: 50px; background: "+scales(legend_colors[elt])+"'></div><div>"+legend_colors[elt]+"</div>");
+    });
     if(!ontology) {
         $("#loading").text("Error: ontology not found for "+term);
     }

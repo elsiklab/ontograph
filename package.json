@@ -24,6 +24,7 @@
     "gulp-uglify": "^1.5.3"
   },
   "dependencies": {
+    "chroma-js": "^1.1.1",
     "cytoscape": "^2.6.4",
     "cytoscape-dagre": "^1.2.0",
     "cytoscape-qtip": "^2.3.0",
