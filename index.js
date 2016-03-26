@@ -11,8 +11,9 @@ var chroma = require('chroma-js');
 var depth_limit = 20;
 var nodes_cy = [];
 var edges_cy = [];
+var relationships = [];
 
-var go_colors = [
+var go_relationships = [
     "parents",
     "has_part",
     "part_of",
@@ -23,7 +24,8 @@ var go_colors = [
     "happens_during",
     "ends_during",
 ];
-var chebi_colors = [
+var chebi_relationships = [
+    "parents",
     "is_conjugate_base_of",
     "has_functional_parent",
     "has_role",
@@ -39,7 +41,7 @@ var chebi_colors = [
 ];
 
 
-var so_colors = [
+var so_relationships = [
     "parents",
     "has_part",
     "part_of",
@@ -57,9 +59,10 @@ var so_colors = [
     "overlaps"
 ];
 
-var arr = go_colors.concat(so_colors).concat(chebi_colors);
-var color_palette = _.shuffle(chroma.scale('Set1').colors(40));
-var scales = function(elt) { return elt=="parents"?"#333":color_palette[arr.indexOf(elt)-1]; };
+var scales = function(elt) {
+    var color_palette = chroma.scale('Set1').colors(relationships.length);
+    return elt == "parents" ? "#333" : color_palette[relationships.indexOf(elt) - 1];
+};
 
 
 function process_parents(cy, graph, term, depth) {
@@ -75,7 +78,7 @@ function process_parents(cy, graph, term, depth) {
             }
         };
     }
-    arr.forEach(function(elt) {
+    relationships.forEach(function(elt) {
         var list = node[elt];
         if(list) {
             list.forEach(function(tangential_term) {
@@ -106,18 +109,18 @@ function process_parents_edges(cy, graph, term, depth) {
     if(!node) {
         return;
     }
-    
-    arr.forEach(function(elt) {
+
+    relationships.forEach(function(elt) {
         if(node[elt]) {
             for(var i=0; i<node[elt].length; i++) {
-                if(!edges_cy[term+","+node[elt][i]+"-"+elt]) {
-                    edges_cy[term+","+node[elt][i]+"-"+elt] = {
+                var edge_name = term+","+node[elt][i]+"-"+elt;
+                if(!edges_cy[edge_name]) {
+                    edges_cy[edge_name] = {
                         data: {
-                            id: term+","+node[elt][i]+"-"+elt,
+                            id: edge_name,
                             label: elt,
                             source: node[elt][i],
-                            target: term,
-                            type: scales(elt)
+                            target: term
                         }
                     };
                     if(depth < depth_limit && elt == "parents") {
@@ -130,9 +133,9 @@ function process_parents_edges(cy, graph, term, depth) {
 }
 
 // check query params
-var param=utils.getParameterByName('term');
-if(param) {
-    $('#term').val(param);
+var param = utils.getParameterByName('term');
+if( param ) {
+    $('#term').val( param );
 }
 
 
@@ -162,12 +165,12 @@ function setup_graph(graph, term) {
                 'target-arrow-shape': 'triangle',
                 'target-arrow-fill': '#333',
                 'target-arrow-color': '#333',
-                'line-color': 'data(type)',
+                'line-color': function(elt) { return scales(elt.data('label')); },
                 'width': '5px'
             });
 
-    process_parents(cy, graph, term, 0);
-    process_parents_edges(cy, graph, term, 0);
+    process_parents( cy, graph, term, 0 );
+    process_parents_edges( cy, graph, term, 0 );
 
     var cy=cytoscape({
         container: $('#cy'),
@@ -178,7 +181,7 @@ function setup_graph(graph, term) {
         }
     });
 
-    
+
     cy.elements().qtip({
         content: function(arg){ return '<b>'+this.data('id')+'</b><br />'+this.data('label'); },
         position: {
@@ -196,7 +199,7 @@ function setup_graph(graph, term) {
     });
 
     //manually crate and stop layout after timeout
-    var layout_cy=cy.makeLayout({
+    var layout_cy = cy.makeLayout({
         name: 'dagre',
         padding: 50,
         randomize: true,
@@ -213,19 +216,19 @@ function setup_graph(graph, term) {
 }
 
 domready(function(){
-    cydagre(cytoscape, dagre); // register extension 
-    cyqtip( cytoscape, $ ); // register extension
+    cydagre(cytoscape, dagre); // register extension
+    cyqtip(cytoscape, $); // register extension
     var graph;
     var ontology;
     var term = $('#term').val();
-    var legend_colors = [];
+    relationships = ["parents"];
     if(term.match(/^ECO:/)) { ontology="evidence_ontology.json"; }
-    else if(term.match(/^GO:/)) { ontology="gene_ontology.json"; legend_colors = go_colors; }
-    else if(term.match(/^SO:/)) { ontology="sequence_ontology.json"; legend_colors = so_colors; }
-    else if(term.match(/^CHEBI:/)) { ontology="chebi.json"; legend_colors = chebi_colors; }
+    else if(term.match(/^GO:/)) { ontology="gene_ontology.json"; relationships = go_relationships; }
+    else if(term.match(/^SO:/)) { ontology="sequence_ontology.json"; relationships = so_relationships; }
+    else if(term.match(/^CHEBI:/)) { ontology="chebi.json"; relationships = chebi_relationships; }
     else if(term.match(/^HP:/)) { ontology="hp.json"; }
-    Object.keys(legend_colors).forEach(function(elt) {
-        $("#legend").append("<div style='height: 12px; width: 50px; background: "+scales(legend_colors[elt])+"'></div><div>"+legend_colors[elt]+"</div>");
+    relationships.forEach(function(elt) {
+        $("#legend").append("<div style='height: 12px; width: 50px; background: " + scales(elt)+"'></div><div>"+elt+"</div>");
     });
     if(!ontology) {
         $("#loading").text("Error: ontology not found for "+term);
