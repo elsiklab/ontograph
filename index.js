@@ -12,6 +12,7 @@ var depth_limit = 20;
 var nodes_cy = [];
 var edges_cy = [];
 var relationships = [];
+var terms = {};
 
 var go_relationships = [
     "parents",
@@ -64,6 +65,12 @@ var scales = function(elt) {
     return elt == "parents" ? "#333" : color_palette[relationships.indexOf(elt) - 1];
 };
 
+function process_graph(graph) {
+    Object.keys(graph).forEach(function(key) {
+        var node = graph[key];
+        terms[node.description] = key;
+    });
+}
 
 function process_parents(cy, graph, term, depth) {
     var node = graph[term];
@@ -132,12 +139,6 @@ function process_parents_edges(cy, graph, term, depth) {
     });
 }
 
-// check query params
-var param = utils.getParameterByName('term');
-if( param ) {
-    $('#term').val( param );
-}
-
 
 function setup_graph(graph, term) {
     // Create the input graph
@@ -171,6 +172,7 @@ function setup_graph(graph, term) {
 
     process_parents( cy, graph, term, 0 );
     process_parents_edges( cy, graph, term, 0 );
+    process_graph( graph );
 
     var cy=cytoscape({
         container: $('#cy'),
@@ -218,6 +220,14 @@ function setup_graph(graph, term) {
 domready(function(){
     cydagre(cytoscape, dagre); // register extension
     cyqtip(cytoscape, $); // register extension
+
+    // check query params
+    var param = utils.getParameterByName('term');
+    if( param ) {
+        $('#term').val( param );
+    }
+
+
     var graph;
     var ontology;
     var term = $('#term').val();
@@ -238,15 +248,26 @@ domready(function(){
             graph = response;
             $("#loading").text("");
             setup_graph(graph, term);
+            $("#search").autocomplete({
+                source: Object.keys(terms)
+            });
         });
     }
 
 
-    $("form").submit(function() {
+    $("#termform").submit(function() {
         var term = $('#term').val();
         window.location.search = "term="+term;
         setup_graph(graph, term);
         return false;
     });
 
+    $("#searchform").submit(function() {
+        var search = $('#search').val();
+        var term = terms[search];
+        console.log('here',search,term);
+        window.location.search = "term="+term;
+        setup_graph(graph, term);
+        return false;
+    });
 });
