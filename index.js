@@ -74,6 +74,7 @@ var scales = function(elt) {
 };
 
 function process_graph(graph) {
+    terms = {};
     Object.keys(graph).forEach(function(key) {
         var node = graph[key];
         terms[node.description] = key;
@@ -178,11 +179,15 @@ function setup_graph( graph, term ) {
                 'line-color': function(elt) { return scales(elt.data('label')); },
                 'width': '5px'
             });
+
+    if( setup ) {
+        nodes_cy = [];
+        edges_cy = [];
+        cy.destroy();
+    }
     process_parents( cy, graph, term, 0 );
     process_parents_edges( cy, graph, term, 0 );
-    process_graph( graph );
 
-    if(setup) cy.destroy();
 
     cy = cytoscape({
         container: $('#cy'),
@@ -232,13 +237,18 @@ function setup_graph( graph, term ) {
 
 function download_and_setup_graph( term ) {
     var new_ontology;
+    if( !term ) {
+        alert('term null');
+        return;
+    }
     if( term.match(/^ECO:/) ) { new_ontology="evidence_ontology.json"; relationships = generic_relationships; }
     else if( term.match(/^GO:/) ) { new_ontology="gene_ontology.json"; relationships = go_relationships; }
     else if( term.match(/^SO:/) ) { new_ontology="sequence_ontology.json"; relationships = so_relationships; }
     else if( term.match(/^CHEBI:/) ) { new_ontology="chebi.json"; relationships = chebi_relationships; }
     else if( term.match(/^HP:/) ) { new_ontology="hp.json"; relationships = generic_relationships;  }
+    $("#legend").empty();
     relationships.forEach( function(elt) {
-        $("#legend").empty().append("<div style='height: 12px; width: 50px; background: " + scales(elt) + "'></div><div>"+elt+"</div>");
+        $("#legend").append("<div style='height: 12px; width: 50px; background: " + scales(elt) + "'></div><div>"+elt+"</div>");
     });
     if( !new_ontology ) {
         $("#loading").text("Error: ontology not found for "+term);
@@ -247,12 +257,19 @@ function download_and_setup_graph( term ) {
         ontology = new_ontology;
         $.ajax({url: ontology, dataType: 'json'}).done(function(response) {
             graph = response;
-            setup_graph( graph, term );
-            $("#loading").text("");
-
+            process_graph( graph );
+            console.log(setup);
+            if( setup ) {
+                console.log('here');
+                $("#search").autocomplete({source: []});
+            }
             $("#search").autocomplete({
                 source: Object.keys(terms)
             });
+
+
+            setup_graph( graph, term );
+            $("#loading").text("");
         });
     }
     else {
@@ -273,17 +290,17 @@ domready( function(){
 
     $("#termform").submit(function() {
         var term = $('#term').val();
-        window.location.search = "term="+term;
-        setup_graph(graph, term);
+        window.history.replaceState( {}, "", "?term="+term );
+        download_and_setup_graph(term);
         return false;
     });
 
     $("#searchform").submit(function() {
         var search = $('#search').val();
         var term = terms[search];
-        console.log('here',search,term);
-        window.location.search = "term="+term;
-        setup_graph(graph, term);
+        $('#term').val( term );
+        window.history.replaceState( {}, "", "?term="+term );
+        download_and_setup_graph(term);
         return false;
     });
 });
