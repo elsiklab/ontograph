@@ -131,6 +131,13 @@ function process_parents_edges(cy, graph, term, depth) {
             for(var i=0; i<node[elt].length; i++) {
                 var edge_name = term+","+node[elt][i]+"-"+elt;
                 if(!edges_cy[edge_name]) {
+                    var source = node[elt][i];
+                    var target = term;
+                    if(elt!="parents")  {
+                        var temp = source;
+                        source = target;
+                        target = temp;
+                    }
                     edges_cy[edge_name] = {
                         data: {
                             id: edge_name,

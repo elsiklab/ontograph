@@ -31,7 +31,7 @@ $graph->iterate(sub {
         my @parent_terms = map { $_->{acc} } @$term_lref;
         $output->{parents} = \@parent_terms;
         $output->{description} = $ni->{term}->{name};
-        my $relationships = $graph->get_relationships($ni->{term}->{acc});
+        my $relationships = $graph->get_parent_relationships($ni->{term}->{acc});
         foreach (@$relationships) {
             if($_->{type} && $_->{type} ne "is_a") {
                 if(!$output->{$_->{type}}) {
