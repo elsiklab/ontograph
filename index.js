@@ -17,11 +17,45 @@ var ontology;
 var setup;
 var cy;
 
+var to_relationships = [
+    "occurs_in",
+    "inheres_in",
+    "has_dividend_quality",
+    "relative_to",
+    "has_ratio_quality",
+    "has_divisor_quality",
+    "has_part",
+    "part_of"
+
+];
+
 
 var generic_relationships = [
     "parents"
 ];
 
+var pato_relationships = [
+    "parents",
+    "decreased_in_magnitude_relative_to",
+    "increased_in_magnitude_relative_to",
+    "towards",
+    "has_part",
+    "has_cross_section",
+    "reciprocal_of"
+];
+
+var po_relationships = [
+    "parents",
+    "part_of",
+    "has_part",
+    "adjacent_to",
+    "preceded_by",
+    "precedes",
+    "located_in",
+    "derives_by_manipulation_from",
+    "participates_in",
+    "develops_from"
+];
 var go_relationships = [
     "parents",
     "has_part",
@@ -253,6 +287,9 @@ function download_and_setup_graph( term ) {
     else if( term.match(/^SO:/) ) { new_ontology="sequence_ontology.json"; relationships = so_relationships; }
     else if( term.match(/^CHEBI:/) ) { new_ontology="chebi.json"; relationships = chebi_relationships; }
     else if( term.match(/^HP:/) ) { new_ontology="hp.json"; relationships = generic_relationships;  }
+    else if( term.match(/^DOID:/) ) { new_ontology="disease_ontology.json"; relationships = generic_relationships;  }
+    else if( term.match(/^PO:/) ) { new_ontology="plant_ontology.json"; relationships = po_relationships;  }
+    else if( term.match(/^PATO:/) ) { new_ontology="pato.json"; relationships = pato_relationships;  }
     $("#legend").empty();
     relationships.forEach( function(elt) {
         $("#legend").append("<div style='height: 12px; width: 50px; background: " + scales(elt) + "'></div><div>"+elt+"</div>");
