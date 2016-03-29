@@ -165,19 +165,15 @@ function process_parents_edges(cy, graph, term, depth) {
             for(var i=0; i<node[elt].length; i++) {
                 var edge_name = term+","+node[elt][i]+"-"+elt;
                 if(!edges_cy[edge_name]) {
-                    var source = node[elt][i];
-                    var target = term;
-                    if(elt!="parents")  {
-                        var temp = source;
-                        source = target;
-                        target = temp;
-                    }
+                    var target = node[elt][i];
+                    var source = term;
+                    
                     edges_cy[edge_name] = {
                         data: {
                             id: edge_name,
                             label: elt,
-                            source: node[elt][i],
-                            target: term
+                            source: source,
+                            target: target 
                         }
                     };
                     if(depth < depth_limit && elt == "parents") {
@@ -262,6 +258,7 @@ function setup_graph( graph, term ) {
     //manually crate and stop layout after timeout
     var layout_cy = cy.makeLayout({
         name: 'dagre',
+        rankDir: 'BT',
         padding: 50,
         randomize: true,
         animate: true,
