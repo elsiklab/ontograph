@@ -16,6 +16,16 @@
       .ui-widget {
           font-size: 62.5%;
       }
+      #cy {
+          position: relative;
+          border: 1px solid black;
+          width: 85%;
+          height: 800px;
+      }
+      #legend {
+          width: 10%;
+          float: right;
+      }
   </style>
 
 </head>
@@ -23,8 +33,8 @@
 <h1>Ontograph: An ontology viewer</h1>
 
 <p id="loading">Loading ...</p>
-<div id="legend" style="float:right; font-size: 66%;"></div>
-<div id="cy" style="position: relative;border: 1px solid black; width: 1200px; height: 800px;"></div>
+<div id="legend"></div>
+<div id="cy"></div>
 
 <div class="ui-widget">
 <form id="termform">
