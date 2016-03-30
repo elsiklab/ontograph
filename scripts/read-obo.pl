@@ -4,6 +4,10 @@ use Data::Dumper;
 use List::MoreUtils;
 use GO::Parser;
 use JSON;
+use Carp;
+$SIG{ __DIE__ } = sub { Carp::confess( @_ ) };
+
+
 
 my $parser = new GO::Parser({handler=>'obj',use_cache=>1});
 
