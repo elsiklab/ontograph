@@ -6,10 +6,11 @@ set -v
 [ -f so-xp-simple.obo ] || wget https://raw.githubusercontent.com/The-Sequence-Ontology/SO-Ontologies/master/so-xp-simple.obo
 [ -f chebi.obo ] || wget ftp://ftp.ebi.ac.uk/pub/databases/chebi/ontology/chebi.obo
 [ -f hp.obo ] || wget http://purl.obolibrary.org/obo/hp.obo
-[ -f HumanDO.obo ] || wget https://raw.githubusercontent.com/DiseaseOntology/HumanDiseaseOntology/master/src/ontology/HumanDO.obo
+[ -f HumanDO.obo ] || wget http://www.berkeleybop.org/ontologies/doid.obo
 [ -f po.obo ] || wget http://purl.obolibrary.org/obo/po.obo
 [ -f pato.obo ] || wget http://purl.obolibrary.org/obo/pato.obo
 [ -f to.obo ] || wget http://purl.obolibrary.org/obo/to.obo
+[ -f cl.obo ] || wget http://purl.obolibrary.org/obo/cl/cl-basic.obo
 
 
 [ -f dist/gene_ontology.json ] || scripts/read-obo.pl go.obo > dist/gene_ontology.json
@@ -21,3 +22,4 @@ set -v
 [ -f dist/plant_ontology.json ] || scripts/read-obo.pl po.obo > dist/plant_ontology.json
 [ -f dist/pato.json ] || scripts/read-obo.pl pato.obo > dist/pato.json
 [ -f dist/plant_trait.json ] || scripts/read-obo.pl to.obo > dist/plant_trait.json
+[ -f dist/cell_ontology.json ] || scripts/read-obo.pl cl.obo > dist/cell_ontology.json
