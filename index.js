@@ -286,6 +286,7 @@ function download_and_setup_graph( term ) {
     else if( term.match(/^HP:/) ) { new_ontology="hp.json"; relationships = generic_relationships;  }
     else if( term.match(/^DOID:/) ) { new_ontology="disease_ontology.json"; relationships = generic_relationships;  }
     else if( term.match(/^PO:/) ) { new_ontology="plant_ontology.json"; relationships = po_relationships;  }
+    else if( term.match(/^TO:/) ) { new_ontology="plant_trait.json"; relationships = generic_relationships;  }
     else if( term.match(/^PATO:/) ) { new_ontology="pato.json"; relationships = pato_relationships;  }
     $("#legend").empty();
     relationships.forEach( function(elt) {
