@@ -284,9 +284,7 @@ function setup_graph( graph, term ) {
 
     layout_cy.run();
 
-    $("#save_button").on('click', function(e) {
-        $("#output").append($("<a/>").attr({href: cy.png({scale: 3})}).append("Download picture"));
-    });
+
 }
 
 function download_and_setup_graph( term ) {
@@ -352,6 +350,11 @@ domready( function(){
         download_and_setup_graph(term);
         return false;
     });
+
+    $("#save_button").on('click', function(e) {
+        $("#output").append($("<a/>").attr({href: cy.png({scale: 3})}).append("Download picture"));
+    });
+
 
     $("#searchform").submit(function() {
         var search = $('#search').val();
