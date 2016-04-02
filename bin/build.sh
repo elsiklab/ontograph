@@ -10,7 +10,7 @@ set -v
 [ -f po.obo ] || wget http://purl.obolibrary.org/obo/po.obo
 [ -f pato.obo ] || wget http://purl.obolibrary.org/obo/pato.obo
 [ -f to.obo ] || wget http://purl.obolibrary.org/obo/to.obo
-[ -f cl-basic.obo ] || wget http://purl.obolibrary.org/obo/cl/cl-basic.obo
+[ -f cl-basic.obo ] || wget https://raw.githubusercontent.com/obophenotype/cell-ontology/master/cl-basic.obo
 
 
 [ -f dist/gene_ontology.json ] || scripts/read-obo.pl go.obo > dist/gene_ontology.json

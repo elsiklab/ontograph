@@ -17,7 +17,24 @@ var ontology;
 var setup;
 var cy;
 
+
+var envo_relationships = [
+    "parents",
+    "adjacent_to",
+    "has_part",
+    "located_in",
+    "has_increased_levels_of",
+    "part_of",
+    "primarily_composed_of",
+    "has_condition",
+    "derives_from",
+    "disconnected_from",
+    "tributary_of"
+];
+
+
 var to_relationships = [
+    "parents",
     "occurs_in",
     "inheres_in",
     "has_dividend_quality",
@@ -26,7 +43,6 @@ var to_relationships = [
     "has_divisor_quality",
     "has_part",
     "part_of"
-
 ];
 
 
@@ -137,7 +153,7 @@ function process_parents( cy, graph, term, depth ) {
                     nodes_cy[tangential_term]={
                         data: {
                             id: tangential_term,
-                            label: utils.explode(tangential_node.description, 20)
+                            label: utils.explode((tangential_node||{}).description||tangential_term, 20)
                         }
                     };
                 }
@@ -286,8 +302,10 @@ function download_and_setup_graph( term ) {
     else if( term.match(/^HP:/) ) { new_ontology="hp.json"; relationships = generic_relationships;  }
     else if( term.match(/^DOID:/) ) { new_ontology="disease_ontology.json"; relationships = generic_relationships;  }
     else if( term.match(/^PO:/) ) { new_ontology="plant_ontology.json"; relationships = po_relationships;  }
-    else if( term.match(/^TO:/) ) { new_ontology="plant_trait.json"; relationships = generic_relationships;  }
+    else if( term.match(/^TO:/) ) { new_ontology="plant_trait.json"; relationships = to_relationships;  }
     else if( term.match(/^PATO:/) ) { new_ontology="pato.json"; relationships = pato_relationships;  }
+    else if( term.match(/^CL:/) ) { new_ontology="cell_ontology.json"; relationships = generic_relationships;  }
+    else if( term.match(/^ENVO:/) ) { new_ontology="envo-basic.json"; relationships = envo_relationships;  }
     $("#legend").empty();
     relationships.forEach( function(elt) {
         $("#legend").append("<div style='height: 12px; width: 50px; background: " + scales(elt) + "'></div><div>"+elt+"</div>");
