@@ -18,105 +18,6 @@ var setup;
 var cy;
 
 
-var envo_relationships = [
-    'parents',
-    'adjacent_to',
-    'has_part',
-    'located_in',
-    'has_increased_levels_of',
-    'part_of',
-    'primarily_composed_of',
-    'has_condition',
-    'derives_from',
-    'disconnected_from',
-    'tributary_of',
-];
-
-
-var to_relationships = [
-    'parents',
-    'occurs_in',
-    'inheres_in',
-    'has_dividend_quality',
-    'relative_to',
-    'has_ratio_quality',
-    'has_divisor_quality',
-    'has_part',
-    'part_of',
-];
-
-
-var generic_relationships = [
-    'parents',
-];
-
-var pato_relationships = [
-    'parents',
-    'decreased_in_magnitude_relative_to',
-    'increased_in_magnitude_relative_to',
-    'towards',
-    'has_part',
-    'has_cross_section',
-    'reciprocal_of',
-];
-
-var po_relationships = [
-    'parents',
-    'part_of',
-    'has_part',
-    'adjacent_to',
-    'preceded_by',
-    'precedes',
-    'located_in',
-    'derives_by_manipulation_from',
-    'participates_in',
-    'develops_from',
-];
-var go_relationships = [
-    'parents',
-    'has_part',
-    'part_of',
-    'negatively_regulates',
-    'regulates',
-    'positively_regulates',
-    'occurs_in',
-    'happens_during',
-    'ends_during',
-];
-var chebi_relationships = [
-    'parents',
-    'is_conjugate_base_of',
-    'has_functional_parent',
-    'has_role',
-    'has_part',
-    'has_parent_hydride',
-    'is_conjugate_acid_of',
-    'is_conjugate_base_of',
-    'is_substituent_group_from',
-    'is_enantiomer_of',
-    'is_tautomer_of',
-    'has_parent_hydride',
-    'is_substituent_group_from',
-];
-
-
-var so_relationships = [
-    'parents',
-    'has_part',
-    'part_of',
-    'has_quality',
-    'derives_from',
-    'transcribed_to',
-    'transcribed_from',
-    'has_origin',
-    'adjacent_to',
-    'non_functional_homolog_of',
-    'variant_of',
-    'member_of',
-    'contains',
-    'guided_by',
-    'overlaps',
-];
 
 var scales = function(elt) {
     var color_palette = chroma.scale('Set1').colors(relationships.length);
@@ -283,8 +184,6 @@ function setup_graph( graph, term ) {
     });
 
     layout_cy.run();
-
-
 }
 
 function download_and_setup_graph( term ) {
@@ -293,42 +192,49 @@ function download_and_setup_graph( term ) {
         alert('term null');
         return;
     }
-    if( term.match(/^ECO:/) ) { new_ontology = 'evidence_ontology.json'; relationships = generic_relationships; }
-    else if( term.match(/^GO:/) ) { new_ontology = 'gene_ontology.json'; relationships = go_relationships; }
-    else if( term.match(/^SO:/) ) { new_ontology = 'sequence_ontology.json'; relationships = so_relationships; }
-    else if( term.match(/^CHEBI:/) ) { new_ontology = 'chebi.json'; relationships = chebi_relationships; }
-    else if( term.match(/^HP:/) ) { new_ontology = 'hp.json'; relationships = generic_relationships;  }
-    else if( term.match(/^DOID:/) ) { new_ontology = 'disease_ontology.json'; relationships = generic_relationships;  }
-    else if( term.match(/^PO:/) ) { new_ontology = 'plant_ontology.json'; relationships = po_relationships;  }
-    else if( term.match(/^TO:/) ) { new_ontology = 'plant_trait.json'; relationships = to_relationships;  }
-    else if( term.match(/^PATO:/) ) { new_ontology = 'pato.json'; relationships = pato_relationships;  }
-    else if( term.match(/^CL:/) ) { new_ontology = 'cell_ontology.json'; relationships = generic_relationships;  }
-    else if( term.match(/^ENVO:/) ) { new_ontology = 'envo-basic.json'; relationships = envo_relationships;  }
-    $('#legend').empty();
-    relationships.forEach( function(elt) {
-        $('#legend').append('<div style=\'height: 12px; width: 50px; background: ' + scales(elt) + '\'></div><div>' + elt + '</div>');
-    });
-    if( !new_ontology ) {
-        $('#loading').text('Error: ontology not found for ' + term);
-    }  else if( new_ontology != ontology ) {
-        ontology = new_ontology;
-        $.ajax({url: ontology, dataType: 'json'}).done(function(response) {
-            graph = response;
-            process_graph( graph );
-            if( setup ) {
-                $('#search').autocomplete({source: []});
-            }
-            $('#search').autocomplete({
-                source: Object.keys(terms),
-            });
+    console.log('here');
 
 
-            setup_graph( graph, term );
-            $('#loading').text('');
+    $.ajax({url: 'relationships.json', dataType: 'json'}).done(function(response) {
+        console.log(response);
+        console.log('hello');
+        if( term.match(/^ECO:/) ) { new_ontology = 'evidence_ontology.json'; relationships = response.generic_relationships; }
+        else if( term.match(/^GO:/) ) { new_ontology = 'gene_ontology.json'; relationships = response.go_relationships; }
+        else if( term.match(/^SO:/) ) { new_ontology = 'sequence_ontology.json'; relationships = response.so_relationships; }
+        else if( term.match(/^CHEBI:/) ) { new_ontology = 'chebi.json'; relationships = response.chebi_relationships; }
+        else if( term.match(/^HP:/) ) { new_ontology = 'hp.json'; relationships = response.generic_relationships;  }
+        else if( term.match(/^DOID:/) ) { new_ontology = 'disease_ontology.json'; relationships = response.generic_relationships;  }
+        else if( term.match(/^PO:/) ) { new_ontology = 'plant_ontology.json'; relationships = response.po_relationships;  }
+        else if( term.match(/^TO:/) ) { new_ontology = 'plant_trait.json'; relationships = response.to_relationships;  }
+        else if( term.match(/^PATO:/) ) { new_ontology = 'pato.json'; relationships = response.pato_relationships;  }
+        else if( term.match(/^CL:/) ) { new_ontology = 'cell_ontology.json'; relationships = response.generic_relationships;  }
+        else if( term.match(/^ENVO:/) ) { new_ontology = 'envo-basic.json'; relationships = response.envo_relationships;  }
+        $('#legend').empty();
+        relationships.forEach( function(elt) {
+            $('#legend').append('<div style=\'height: 12px; width: 50px; background: ' + scales(elt) + '\'></div><div>' + elt + '</div>');
         });
-    }  else {
-        setup_graph( graph, term );
-    }
+        if( !new_ontology ) {
+            $('#loading').text('Error: ontology not found for ' + term);
+        }  else if( new_ontology != ontology ) {
+            ontology = new_ontology;
+            $.ajax({url: ontology, dataType: 'json'}).done(function(response) {
+                graph = response;
+                process_graph( graph );
+                if( setup ) {
+                    $('#search').autocomplete({source: []});
+                }
+                $('#search').autocomplete({
+                    source: Object.keys(terms),
+                });
+
+
+                setup_graph( graph, term );
+                $('#loading').text('');
+            });
+        }  else {
+            setup_graph( graph, term );
+        }
+    });
 }
 domready( function() {
     cydagre( cytoscape, dagre ); // Register extension

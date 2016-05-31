@@ -1,0 +1,101 @@
+{
+    "envo_relationships":  [
+        "parents",
+        "adjacent_to",
+        "has_part",
+        "located_in",
+        "has_increased_levels_of",
+        "part_of",
+        "primarily_composed_of",
+        "has_condition",
+        "derives_from",
+        "disconnected_from",
+        "tributary_of"
+    ],
+
+
+    "to_relationships": [
+        "parents",
+        "occurs_in",
+        "inheres_in",
+        "has_dividend_quality",
+        "relative_to",
+        "has_ratio_quality",
+        "has_divisor_quality",
+        "has_part",
+        "part_of"
+    ],
+
+
+    "generic_relationships": [
+        "parents"
+    ],
+
+    "pato_relationships": [
+        "parents",
+        "decreased_in_magnitude_relative_to",
+        "increased_in_magnitude_relative_to",
+        "towards",
+        "has_part",
+        "has_cross_section",
+        "reciprocal_of"
+    ],
+
+    "po_relationships": [
+        "parents",
+        "part_of",
+        "has_part",
+        "adjacent_to",
+        "preceded_by",
+        "precedes",
+        "located_in",
+        "derives_by_manipulation_from",
+        "participates_in",
+        "develops_from"
+    ],
+    "go_relationships": [
+        "parents",
+        "has_part",
+        "part_of",
+        "negatively_regulates",
+        "regulates",
+        "positively_regulates",
+        "occurs_in",
+        "happens_during",
+        "ends_during"
+    ],
+    "chebi_relationships": [
+        "parents",
+        "is_conjugate_base_of",
+        "has_functional_parent",
+        "has_role",
+        "has_part",
+        "has_parent_hydride",
+        "is_conjugate_acid_of",
+        "is_conjugate_base_of",
+        "is_substituent_group_from",
+        "is_enantiomer_of",
+        "is_tautomer_of",
+        "has_parent_hydride",
+        "is_substituent_group_from"
+    ],
+
+
+    "so_relationships": [
+        "parents",
+        "has_part",
+        "part_of",
+        "has_quality",
+        "derives_from",
+        "transcribed_to",
+        "transcribed_from",
+        "has_origin",
+        "adjacent_to",
+        "non_functional_homolog_of",
+        "variant_of",
+        "member_of",
+        "contains",
+        "guided_by",
+        "overlaps"
+    ]
+}

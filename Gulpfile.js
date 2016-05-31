@@ -15,7 +15,8 @@ gulp.task('build', function() {
 
 
   gulp.src([
-    '*.html'
+    '*.html',
+    '*.json'
   ]).pipe(gulp.dest('dist'))
 
 
@@ -38,7 +39,8 @@ gulp.task('debug', function() {
 
 
   gulp.src([
-    '*.html'
+    '*.html',
+    '*.json'
   ]).pipe(gulp.dest('dist'))
 
 
