@@ -19,108 +19,108 @@ var cy;
 
 
 var envo_relationships = [
-    "parents",
-    "adjacent_to",
-    "has_part",
-    "located_in",
-    "has_increased_levels_of",
-    "part_of",
-    "primarily_composed_of",
-    "has_condition",
-    "derives_from",
-    "disconnected_from",
-    "tributary_of"
+    'parents',
+    'adjacent_to',
+    'has_part',
+    'located_in',
+    'has_increased_levels_of',
+    'part_of',
+    'primarily_composed_of',
+    'has_condition',
+    'derives_from',
+    'disconnected_from',
+    'tributary_of',
 ];
 
 
 var to_relationships = [
-    "parents",
-    "occurs_in",
-    "inheres_in",
-    "has_dividend_quality",
-    "relative_to",
-    "has_ratio_quality",
-    "has_divisor_quality",
-    "has_part",
-    "part_of"
+    'parents',
+    'occurs_in',
+    'inheres_in',
+    'has_dividend_quality',
+    'relative_to',
+    'has_ratio_quality',
+    'has_divisor_quality',
+    'has_part',
+    'part_of',
 ];
 
 
 var generic_relationships = [
-    "parents"
+    'parents',
 ];
 
 var pato_relationships = [
-    "parents",
-    "decreased_in_magnitude_relative_to",
-    "increased_in_magnitude_relative_to",
-    "towards",
-    "has_part",
-    "has_cross_section",
-    "reciprocal_of"
+    'parents',
+    'decreased_in_magnitude_relative_to',
+    'increased_in_magnitude_relative_to',
+    'towards',
+    'has_part',
+    'has_cross_section',
+    'reciprocal_of',
 ];
 
 var po_relationships = [
-    "parents",
-    "part_of",
-    "has_part",
-    "adjacent_to",
-    "preceded_by",
-    "precedes",
-    "located_in",
-    "derives_by_manipulation_from",
-    "participates_in",
-    "develops_from"
+    'parents',
+    'part_of',
+    'has_part',
+    'adjacent_to',
+    'preceded_by',
+    'precedes',
+    'located_in',
+    'derives_by_manipulation_from',
+    'participates_in',
+    'develops_from',
 ];
 var go_relationships = [
-    "parents",
-    "has_part",
-    "part_of",
-    "negatively_regulates",
-    "regulates",
-    "positively_regulates",
-    "occurs_in",
-    "happens_during",
-    "ends_during",
+    'parents',
+    'has_part',
+    'part_of',
+    'negatively_regulates',
+    'regulates',
+    'positively_regulates',
+    'occurs_in',
+    'happens_during',
+    'ends_during',
 ];
 var chebi_relationships = [
-    "parents",
-    "is_conjugate_base_of",
-    "has_functional_parent",
-    "has_role",
-    "has_part",
-    "has_parent_hydride",
-    "is_conjugate_acid_of",
-    "is_conjugate_base_of",
-    "is_substituent_group_from",
-    "is_enantiomer_of",
-    "is_tautomer_of",
-    "has_parent_hydride",
-    "is_substituent_group_from"
+    'parents',
+    'is_conjugate_base_of',
+    'has_functional_parent',
+    'has_role',
+    'has_part',
+    'has_parent_hydride',
+    'is_conjugate_acid_of',
+    'is_conjugate_base_of',
+    'is_substituent_group_from',
+    'is_enantiomer_of',
+    'is_tautomer_of',
+    'has_parent_hydride',
+    'is_substituent_group_from',
 ];
 
 
 var so_relationships = [
-    "parents",
-    "has_part",
-    "part_of",
-    "has_quality",
-    "derives_from",
-    "transcribed_to",
-    "transcribed_from",
-    "has_origin",
-    "adjacent_to",
-    "non_functional_homolog_of",
-    "variant_of",
-    "member_of",
-    "contains",
-    "guided_by",
-    "overlaps"
+    'parents',
+    'has_part',
+    'part_of',
+    'has_quality',
+    'derives_from',
+    'transcribed_to',
+    'transcribed_from',
+    'has_origin',
+    'adjacent_to',
+    'non_functional_homolog_of',
+    'variant_of',
+    'member_of',
+    'contains',
+    'guided_by',
+    'overlaps',
 ];
 
 var scales = function(elt) {
     var color_palette = chroma.scale('Set1').colors(relationships.length);
-    return elt == "parents" ? "#333" : color_palette[relationships.indexOf(elt) - 1];
+    return elt == 'parents' ? '#333' : color_palette[relationships.indexOf(elt) - 1];
 };
 
 function process_graph(graph) {
@@ -140,8 +140,8 @@ function process_parents( cy, graph, term, depth ) {
         nodes_cy[term] = {
             data: {
                 id: term,
-                label: utils.explode(node.description, 20)
-            }
+                label: utils.explode(node.description, 20),
+            },
         };
     }
     relationships.forEach(function(elt) {
@@ -150,20 +150,20 @@ function process_parents( cy, graph, term, depth ) {
             list.forEach(function(tangential_term) {
                 var tangential_node = graph[tangential_term];
                 if(!nodes_cy[tangential_term]) {
-                    nodes_cy[tangential_term]={
+                    nodes_cy[tangential_term] = {
                         data: {
                             id: tangential_term,
-                            label: utils.explode((tangential_node||{}).description||tangential_term, 20)
-                        }
+                            label: utils.explode((tangential_node || {}).description || tangential_term, 20),
+                        },
                     };
                 }
             });
         }
     });
     if(node.parents) {
-        for(var i=0; i<node.parents.length; i++) {
-            if(depth<depth_limit) {
-                process_parents(cy, graph, node.parents[i], depth+1);
+        for(var i = 0; i < node.parents.length; i++) {
+            if(depth < depth_limit) {
+                process_parents(cy, graph, node.parents[i], depth + 1);
             }
         }
     }
@@ -178,22 +178,22 @@ function process_parents_edges(cy, graph, term, depth) {
 
     relationships.forEach(function(elt) {
         if(node[elt]) {
-            for(var i=0; i<node[elt].length; i++) {
-                var edge_name = term+","+node[elt][i]+"-"+elt;
+            for(var i = 0; i < node[elt].length; i++) {
+                var edge_name = term + ',' + node[elt][i] + '-' + elt;
                 if(!edges_cy[edge_name]) {
                     var target = node[elt][i];
                     var source = term;
-                    
+
                     edges_cy[edge_name] = {
                         data: {
                             id: edge_name,
                             label: elt,
                             source: source,
-                            target: target 
-                        }
+                            target: target,
+                        },
                     };
-                    if(depth < depth_limit && elt == "parents") {
-                        process_parents_edges(cy, graph, node[elt][i], depth+1);
+                    if(depth < depth_limit && elt == 'parents') {
+                        process_parents_edges(cy, graph, node[elt][i], depth + 1);
                     }
                 }
             }
@@ -208,21 +208,21 @@ function setup_graph( graph, term ) {
     var stylesheet_cy = cytoscape.stylesheet()
         .selector('node')
             .style({
-                'content': 'data(label)',
+                content: 'data(label)',
                 'text-valign': 'center',
-                'color': '#000',
+                color: '#000',
                 'background-color': '#fff',
                 'border-color': '#333',
                 'border-width': '5px',
-                'shape': 'rectangle',
+                shape: 'rectangle',
                 'text-max-width': '1000px',
                 'text-wrap': 'wrap',
-                'width': 'label',
+                width: 'label',
                 'padding-left': '9px',
                 'padding-bottom': '9px',
                 'padding-right': '9px',
                 'padding-top': '9px',
-                'height': 'label'
+                height: 'label',
             })
         .selector('edge')
             .css({
@@ -230,7 +230,7 @@ function setup_graph( graph, term ) {
                 'target-arrow-fill': '#333',
                 'target-arrow-color': '#333',
                 'line-color': function(elt) { return scales(elt.data('label')); },
-                'width': '5px'
+                width: '5px',
             });
 
     if( setup ) {
@@ -247,31 +247,31 @@ function setup_graph( graph, term ) {
         style: stylesheet_cy,
         elements: {
             nodes: _.values(nodes_cy),
-            edges: _.values(edges_cy)
-        }
+            edges: _.values(edges_cy),
+        },
     });
 
     setup = true;
-    
+
 
 
     cy.elements().qtip({
-        content: function(arg){ return '<b>'+this.data('id')+'</b><br />'+this.data('label'); },
+        content: function(arg) { return '<b>' + this.data('id') + '</b><br />' + this.data('label'); },
         position: {
             my: 'top center',
-            at: 'bottom center'
+            at: 'bottom center',
         },
         style: {
             classes: 'qtip-bootstrap',
             'font-family': 'sans-serif',
             tip: {
                 width: 16,
-                height: 8
-            }
-        }
+                height: 8,
+            },
+        },
     });
 
-    //manually crate and stop layout after timeout
+    // Manually crate and stop layout after timeout
     var layout_cy = cy.makeLayout({
         name: 'dagre',
         rankDir: 'BT',
@@ -279,7 +279,7 @@ function setup_graph( graph, term ) {
         randomize: true,
         animate: true,
         infinite: true,
-        repulsion: 1
+        repulsion: 1,
     });
 
     layout_cy.run();
@@ -293,50 +293,48 @@ function download_and_setup_graph( term ) {
         alert('term null');
         return;
     }
-    if( term.match(/^ECO:/) ) { new_ontology="evidence_ontology.json"; relationships = generic_relationships; }
-    else if( term.match(/^GO:/) ) { new_ontology="gene_ontology.json"; relationships = go_relationships; }
-    else if( term.match(/^SO:/) ) { new_ontology="sequence_ontology.json"; relationships = so_relationships; }
-    else if( term.match(/^CHEBI:/) ) { new_ontology="chebi.json"; relationships = chebi_relationships; }
-    else if( term.match(/^HP:/) ) { new_ontology="hp.json"; relationships = generic_relationships;  }
-    else if( term.match(/^DOID:/) ) { new_ontology="disease_ontology.json"; relationships = generic_relationships;  }
-    else if( term.match(/^PO:/) ) { new_ontology="plant_ontology.json"; relationships = po_relationships;  }
-    else if( term.match(/^TO:/) ) { new_ontology="plant_trait.json"; relationships = to_relationships;  }
-    else if( term.match(/^PATO:/) ) { new_ontology="pato.json"; relationships = pato_relationships;  }
-    else if( term.match(/^CL:/) ) { new_ontology="cell_ontology.json"; relationships = generic_relationships;  }
-    else if( term.match(/^ENVO:/) ) { new_ontology="envo-basic.json"; relationships = envo_relationships;  }
-    $("#legend").empty();
+    if( term.match(/^ECO:/) ) { new_ontology = 'evidence_ontology.json'; relationships = generic_relationships; }
+    else if( term.match(/^GO:/) ) { new_ontology = 'gene_ontology.json'; relationships = go_relationships; }
+    else if( term.match(/^SO:/) ) { new_ontology = 'sequence_ontology.json'; relationships = so_relationships; }
+    else if( term.match(/^CHEBI:/) ) { new_ontology = 'chebi.json'; relationships = chebi_relationships; }
+    else if( term.match(/^HP:/) ) { new_ontology = 'hp.json'; relationships = generic_relationships;  }
+    else if( term.match(/^DOID:/) ) { new_ontology = 'disease_ontology.json'; relationships = generic_relationships;  }
+    else if( term.match(/^PO:/) ) { new_ontology = 'plant_ontology.json'; relationships = po_relationships;  }
+    else if( term.match(/^TO:/) ) { new_ontology = 'plant_trait.json'; relationships = to_relationships;  }
+    else if( term.match(/^PATO:/) ) { new_ontology = 'pato.json'; relationships = pato_relationships;  }
+    else if( term.match(/^CL:/) ) { new_ontology = 'cell_ontology.json'; relationships = generic_relationships;  }
+    else if( term.match(/^ENVO:/) ) { new_ontology = 'envo-basic.json'; relationships = envo_relationships;  }
+    $('#legend').empty();
     relationships.forEach( function(elt) {
-        $("#legend").append("<div style='height: 12px; width: 50px; background: " + scales(elt) + "'></div><div>"+elt+"</div>");
+        $('#legend').append('<div style=\'height: 12px; width: 50px; background: ' + scales(elt) + '\'></div><div>' + elt + '</div>');
     });
     if( !new_ontology ) {
-        $("#loading").text("Error: ontology not found for "+term);
-    }
-    else if( new_ontology != ontology ) {
+        $('#loading').text('Error: ontology not found for ' + term);
+    }  else if( new_ontology != ontology ) {
         ontology = new_ontology;
         $.ajax({url: ontology, dataType: 'json'}).done(function(response) {
             graph = response;
             process_graph( graph );
             if( setup ) {
-                $("#search").autocomplete({source: []});
+                $('#search').autocomplete({source: []});
             }
-            $("#search").autocomplete({
-                source: Object.keys(terms)
+            $('#search').autocomplete({
+                source: Object.keys(terms),
             });
 
 
             setup_graph( graph, term );
-            $("#loading").text("");
+            $('#loading').text('');
         });
-    }
-    else {
+    }  else {
         setup_graph( graph, term );
     }
 }
-domready( function(){
-    cydagre( cytoscape, dagre ); // register extension
-    cyqtip( cytoscape, $ ); // register extension
+domready( function() {
+    cydagre( cytoscape, dagre ); // Register extension
+    cyqtip( cytoscape, $ ); // Register extension
 
-    // check query params
+    // Check query params
     var param = utils.getParameterByName('term');
     if( param ) {
         $('#term').val( param );
@@ -344,23 +342,23 @@ domready( function(){
     var term = $('#term').val();
     download_and_setup_graph( term );
 
-    $("#termform").submit(function() {
+    $('#termform').submit(function() {
         var term = $('#term').val();
-        window.history.replaceState( {}, "", "?term="+term );
+        window.history.replaceState( {}, '', '?term=' + term );
         download_and_setup_graph(term);
         return false;
     });
 
-    $("#save_button").on('click', function(e) {
-        $("#output").append($("<a/>").attr({href: cy.png({scale: 3})}).append("Download picture"));
+    $('#save_button').on('click', function(e) {
+        $('#output').append($('<a/>').attr({href: cy.png({scale: 3})}).append('Download picture'));
     });
 
 
-    $("#searchform").submit(function() {
+    $('#searchform').submit(function() {
         var search = $('#search').val();
         var term = terms[search];
         $('#term').val( term );
-        window.history.replaceState( {}, "", "?term="+term );
+        window.history.replaceState( {}, '', '?term=' + term );
         download_and_setup_graph(term);
         return false;
     });
