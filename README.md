@@ -10,20 +10,23 @@ Build
     gulp
 
 Build watch
-    
+
     gulp watch
 
 Build debug
 
-    gulp debug
+    gulp devmode
 
 Build watch debug
 
     gulp watchdev
 
+
 Build ontologies
 
     bin/build.sh
+
+Note: The debug mode is currently required for cose-bilkent
 
 ## Demo
 
