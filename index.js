@@ -2,7 +2,6 @@ var dagre = require('dagre');
 var cytoscape = require('cytoscape');
 var cydagre = require('cytoscape-dagre');
 var cyqtip = require('cytoscape-qtip');
-var domready = require('domready');
 var _ = require('underscore');
 var utils = require('./js/util.js');
 var chroma = require('chroma-js');
@@ -41,7 +40,7 @@ function process_parents( cy, graph, term, depth ) {
         nodes_cy[term] = {
             data: {
                 id: term,
-                label: utils.explode(node.description, 20),
+                label: utils.explode(node.description, 22),
             },
         };
     }
@@ -54,7 +53,7 @@ function process_parents( cy, graph, term, depth ) {
                     nodes_cy[tangential_term] = {
                         data: {
                             id: tangential_term,
-                            label: utils.explode((tangential_node || {}).description || tangential_term, 20),
+                            label: utils.explode((tangential_node || {}).description || tangential_term, 22),
                         },
                     };
                 }
@@ -87,10 +86,9 @@ function process_parents_edges(cy, graph, term, depth) {
 
                     edges_cy[edge_name] = {
                         data: {
-                            id: edge_name,
                             label: elt,
-                            source: source,
                             target: target,
+                            source: source,
                         },
                     };
                     if(depth < depth_limit && elt == 'parents') {
@@ -111,10 +109,13 @@ function setup_graph( graph, term ) {
             .style({
                 content: 'data(label)',
                 'text-valign': 'center',
+                'font-size': '20px',
+                'font-family': 'sans-serif',
+                'font-weight': 100,
                 color: '#000',
                 'background-color': '#fff',
                 'border-color': '#333',
-                'border-width': '5px',
+                'border-width': 1.2,
                 shape: 'rectangle',
                 'text-max-width': '1000px',
                 'text-wrap': 'wrap',
@@ -127,12 +128,19 @@ function setup_graph( graph, term ) {
             })
         .selector('edge')
             .css({
-                'target-arrow-shape': 'triangle',
-                'target-arrow-fill': '#333',
-                'target-arrow-color': '#333',
-                'line-color': function(elt) { return scales(elt.data('label')); },
-                width: '5px',
-            });
+              'curve-style': 'bezier',
+              'target-arrow-shape': 'triangle',
+              'target-arrow-color': function(elt) { return scales(elt.data('label')); },
+              'line-color': function(elt) { return scales(elt.data('label')); },
+              'width':2
+            })
+//            .css({
+//                'target-arrow-fill': '#333',
+//                'target-arrow-shape': 'triangle',
+//                'target-arrow-color': '#333',
+//                'line-color': '#333',// function(elt) { return scales(elt.data('label')); },
+//                width: 5,
+//            });
 
     if( setup ) {
         nodes_cy = [];
@@ -175,7 +183,7 @@ function setup_graph( graph, term ) {
     // Manually crate and stop layout after timeout
     var layout_cy = cy.makeLayout({
         name: 'dagre',
-        rankDir: 'BT',
+        //rankDir: 'BT',
         padding: 50,
         randomize: true,
         animate: true,
@@ -236,7 +244,7 @@ function download_and_setup_graph( term ) {
         }
     });
 }
-domready( function() {
+$( function() {
     cydagre( cytoscape, dagre ); // Register extension
     cyqtip( cytoscape, $ ); // Register extension
 
