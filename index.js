@@ -2,6 +2,15 @@ var dagre = require('dagre');
 var cytoscape = require('cytoscape');
 var cydagre = require('cytoscape-dagre');
 var cyqtip = require('cytoscape-qtip');
+var cycola = require('cytoscape-cola');
+var cycose = require('cytoscape-cose-bilkent');
+var cyarbor = require('cytoscape-arbor');
+var cydagre = require('cytoscape-dagre');
+var cyspringy = require('cytoscape-springy');
+var cyspread = require('cytoscape-spread');
+var springy = require('springy');
+
+
 var _ = require('underscore');
 var utils = require('./js/util.js');
 var chroma = require('chroma-js');
@@ -109,13 +118,9 @@ function setup_graph( graph, term ) {
             .style({
                 content: 'data(label)',
                 'text-valign': 'center',
-                'font-size': '20px',
-                'font-family': 'sans-serif',
-                'font-weight': 100,
-                color: '#000',
                 'background-color': '#fff',
                 'border-color': '#333',
-                'border-width': 1.2,
+                'border-width': 5,
                 shape: 'rectangle',
                 'text-max-width': '1000px',
                 'text-wrap': 'wrap',
@@ -128,19 +133,12 @@ function setup_graph( graph, term ) {
             })
         .selector('edge')
             .css({
-              'curve-style': 'bezier',
-              'target-arrow-shape': 'triangle',
-              'target-arrow-color': function(elt) { return scales(elt.data('label')); },
-              'line-color': function(elt) { return scales(elt.data('label')); },
-              'width':2
-            })
-//            .css({
-//                'target-arrow-fill': '#333',
-//                'target-arrow-shape': 'triangle',
-//                'target-arrow-color': '#333',
-//                'line-color': '#333',// function(elt) { return scales(elt.data('label')); },
-//                width: 5,
-//            });
+                'target-arrow-fill': '#333',
+                'target-arrow-shape': 'triangle',
+                'target-arrow-color': '#333',
+                'line-color': function(elt) { return scales(elt.data('label')); },
+                width: 5,
+            });
 
     if( setup ) {
         nodes_cy = [];
@@ -181,9 +179,10 @@ function setup_graph( graph, term ) {
     });
 
     // Manually crate and stop layout after timeout
+    var layout = $('#layout option:selected').text();
     var layout_cy = cy.makeLayout({
-        name: 'dagre',
-        //rankDir: 'BT',
+        name: layout,
+        rankDir: 'BT',
         padding: 50,
         randomize: true,
         animate: true,
@@ -200,12 +199,9 @@ function download_and_setup_graph( term ) {
         alert('term null');
         return;
     }
-    console.log('here');
 
 
     $.ajax({url: 'relationships.json', dataType: 'json'}).done(function(response) {
-        console.log(response);
-        console.log('hello');
         if( term.match(/^ECO:/) ) { new_ontology = 'evidence_ontology.json'; relationships = response.generic_relationships; }
         else if( term.match(/^GO:/) ) { new_ontology = 'gene_ontology.json'; relationships = response.go_relationships; }
         else if( term.match(/^SO:/) ) { new_ontology = 'sequence_ontology.json'; relationships = response.so_relationships; }
@@ -247,6 +243,12 @@ function download_and_setup_graph( term ) {
 $( function() {
     cydagre( cytoscape, dagre ); // Register extension
     cyqtip( cytoscape, $ ); // Register extension
+    cycola( cytoscape, cola ); // Register extension
+    cydagre( cytoscape, dagre ); // Register extension
+    cyspringy( cytoscape, springy ); // Register extension
+    cyarbor( cytoscape, arbor ); // Register extension
+    cyspread( cytoscape ); // Register extension
+    cycose( cytoscape ); // Register extension
 
     // Check query params
     var param = utils.getParameterByName('term');
