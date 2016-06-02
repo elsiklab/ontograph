@@ -20,12 +20,12 @@ var chroma = require('chroma-js');
 var depth_limit = 20;
 var nodes_cy = [];
 var edges_cy = [];
+var node_scores = {};
 var relationships = [];
 var graph;
 var ontology;
 var setup;
 var cy;
-
 
 
 var scales = function(elt) {
@@ -41,7 +41,7 @@ function process_graph(graph) {
     });
 }
 
-function process_parents( cy, graph, term, depth ) {
+function process_parents( cy, graph, term, depth, score ) {
     var node = graph[ term ];
     if( !node ) {
         return;
@@ -51,6 +51,8 @@ function process_parents( cy, graph, term, depth ) {
             data: {
                 id: term,
                 label: utils.explode(node.description, 22),
+                score: -Math.log(node_scores[term]),
+                pval: node_scores[term],
             },
         };
     }
@@ -114,14 +116,16 @@ function process_parents_edges(cy, graph, term, depth) {
 
 
 function setup_graph( graph, term ) {
-    console.log(term);
     // Create the input graph
     var stylesheet_cy = cytoscape.stylesheet()
         .selector('node')
             .style({
                 content: 'data(label)',
                 'text-valign': 'center',
-                'background-color': '#fff',
+                'background-color': function(elt) {
+                    var maxval = -Math.log(_.min(_.values(node_scores)));
+                    return elt.data('score') ? 'hsl(' + elt.data('score') * 150 / maxval + ',50%,50%)' : '#fff';
+                },
                 'border-color': '#333',
                 'border-width': 5,
                 shape: 'rectangle',
@@ -152,7 +156,6 @@ function setup_graph( graph, term ) {
 
     if(_.isArray(term)) {
         _.each(term, function(m) {
-            console.log(m);
             process_parents( cy, graph, m, 0 );
             process_parents_edges( cy, graph, m, 0 );
         });
@@ -180,7 +183,7 @@ function setup_graph( graph, term ) {
 
 
     cy.elements().qtip({
-        content: function(arg) { return '<b>' + this.data('id') + '</b><br />' + this.data('label'); },
+        content: function(arg) { return '<b>' + this.data('id') + '</b><br />' + this.data('label') + (this.data('pval')?'<br />P-val: ' + this.data('pval'):''); },
         position: {
             my: 'top center',
             at: 'bottom center',
@@ -212,8 +215,7 @@ function setup_graph( graph, term ) {
 
 
 
-function download_and_setup_graph( term ) {
-    console.log('dl',term);
+function download_and_setup_graph( term, pval ) {
     var new_ontology;
     var checkterm = term;
     if( !term ) {
@@ -223,6 +225,7 @@ function download_and_setup_graph( term ) {
     if(_.isArray(term)) {
         checkterm = term[0];
     }
+    $('#loading').text('Loading...');
 
 
     $.ajax({url: 'relationships.json', dataType: 'json'}).done(function(response) {
@@ -256,34 +259,19 @@ function download_and_setup_graph( term ) {
                 });
 
 
-                setup_graph( graph, term );
+                setup_graph( graph, term, pval );
                 $('#loading').text('');
             });
         }  else {
             setup_graph( graph, term );
+            $('#loading').text('');
         }
     });
 }
 
+function setup_event_handlers() {
 
-$( function() {
-    cydagre( cytoscape, dagre ); // Register extension
-    cyqtip( cytoscape, $ ); // Register extension
-    cycola( cytoscape, cola ); // Register extension
-    cydagre( cytoscape, dagre ); // Register extension
-    cyspringy( cytoscape, springy ); // Register extension
-    cyarbor( cytoscape, arbor ); // Register extension
-    cyspread( cytoscape ); // Register extension
-    cycose( cytoscape ); // Register extension
-
-    // Check query params
-    var param = utils.getParameterByName('term');
-    if( param ) {
-        $('#term').val( param );
-    }
-    var term = $('#term').val();
-    download_and_setup_graph( term );
-
+    // Event handlers
     $('#termform').submit(function() {
         var term = $('#term').val();
         window.history.replaceState( {}, '', '?term=' + term );
@@ -311,22 +299,66 @@ $( function() {
     });
 
     $('#multi').submit(function(evt) {
-        console.log($('#goterms').val());
         var nodes = [];
         var pvals = [];
         $('#goterms').val().split('\n').forEach(function(line) {
             var matches = line.split('\t');
             if(matches.length == 2) {
-                console.log(matches[0],matches[1])
-
                 nodes.push(matches[0]);
                 pvals.push(matches[1]);
+                node_scores[matches[0]] = parseFloat(matches[1]);
+            }
+            else {
+                var matches = line.split(' ');
+                if(matches.length == 2) {
+                    nodes.push(matches[0]);
+                    pvals.push(matches[1]);
+                    node_scores[matches[0]] = parseFloat(matches[1]);
+                }
             }
         });
-        download_and_setup_graph(nodes);
+        window.history.replaceState( {}, '', '?terms=' + nodes.join(',') + '&pvals=' + pvals.join(',') );
+        download_and_setup_graph(nodes, pvals);
         return false;
     });
+}
+
+$( function() {
+    cydagre( cytoscape, dagre ); // Register extension
+    cyqtip( cytoscape, $ ); // Register extension
+    cycola( cytoscape, cola ); // Register extension
+    cydagre( cytoscape, dagre ); // Register extension
+    cyspringy( cytoscape, springy ); // Register extension
+    cyarbor( cytoscape, arbor ); // Register extension
+    cyspread( cytoscape ); // Register extension
+    cycose( cytoscape ); // Register extension
+
+    // Check query params
+    var terms = utils.getParameterByName('terms');
+    var pvals = utils.getParameterByName('pvals');
+    var term = utils.getParameterByName('term');
+
+    if( terms && pvals ) {
+        var terms = terms.split(',');
+        var pvals = pvals.split(',');
+        var str = '';
+        if( terms.length == pvals.length ) {
+            for(var i = 0; i < terms.length; i++) {
+                str += terms[i] + '\t' + pvals[i] + '\n';
+                node_scores[terms[i]] = parseFloat(pvals[i]);
+            }
+            $('#goterms').val(str);
+        }
+        download_and_setup_graph( terms, pvals );
+    } else if( term ) {
+        $('#term').val(term);
+        download_and_setup_graph( term );
+    }
+
+    setup_event_handlers();
 });
+
+
 
 },{"./js/util.js":2,"chroma-js":4,"cytoscape":93,"cytoscape-arbor":5,"cytoscape-cola":6,"cytoscape-cose-bilkent":7,"cytoscape-dagre":8,"cytoscape-qtip":9,"cytoscape-spread":10,"cytoscape-springy":11,"dagre":119,"springy":173,"underscore":174}],2:[function(require,module,exports){
 
