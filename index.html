@@ -43,7 +43,7 @@
 </head>
 <body>
   <h1>Ontograph: An ontology viewer</h1>
-  <form id="layout_form">
+  <form id="layout_form" action="">
     <label for="layout">Select layout</label> <select id="layout">
       <option value="dagre">
         dagre
@@ -77,13 +77,13 @@
       </option>
     </select> <button type="submit">Submit</button>
   </form>
-  <form id="termform" name="termform">
+  <form id="termform" name="termform" action="">
     <label for="term">Search an ontology term or identifier directly:</label> <input type="text" id="term" value="GO:0070060" class="ui-widget"> <button type="submit">Submit</button>
   </form>
-  <form id="searchform" name="searchform">
+  <form id="searchform" name="searchform" action="">
     <label for="search">Search for an ontology term from it's description:</label> <input type="text" id="search" class="ui-widget"> <button type="submit">Submit</button>
   </form>
-  <form id="multi" name="multi">
+  <form id="multi" name="multi" action="">
     <label for="goterms">Submit multiple GO terms with scores:</label> 
     <textarea id="goterms" cols="40" rows="10"></textarea> <button type="submit">Submit</button>
   </form><button id="save_button">Save PNG</button>
