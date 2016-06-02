@@ -285,7 +285,8 @@ $( function() {
     var terms = $('#goterms').val();
 
     // Process textarea from form
-    var nodes=[],pvals=[];
+    var nodes = [];
+    var pvals = [];
     terms.split('\n').forEach(function(line) {
         var matches = line.split('\t');
         console.log(matches[0],matches[1])
