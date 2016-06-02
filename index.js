@@ -96,6 +96,7 @@ function process_parents_edges(cy, graph, term, depth) {
                     edges_cy[edge_name] = {
                         data: {
                             label: elt,
+                            id: edge_name,
                             target: target,
                             source: source,
                         },
@@ -182,7 +183,7 @@ function setup_graph( graph, term ) {
     // Manually crate and stop layout after timeout
     var layout = $('#layout option:selected').text();
     var layout_cy = cy.makeLayout({
-        name: layout,
+        name: layout.trim(),
         rankDir: 'BT',
         padding: 50,
         randomize: true,
@@ -278,5 +279,18 @@ $( function() {
         window.history.replaceState( {}, '', '?term=' + term );
         download_and_setup_graph(term);
         return false;
+    });
+
+    var terms = $('#goterms').val();
+
+    // Process textarea from form
+    var nodes = [];
+    var pvals = [];
+    terms.split('\n').forEach(function(line) {
+        var matches = line.split('\t');
+        console.log(matches[0],matches[1])
+
+        nodes.push(matches[0]);
+        pvals.push(matches[1]);
     });
 });
