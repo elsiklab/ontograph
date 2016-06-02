@@ -113,6 +113,7 @@ function process_parents_edges(cy, graph, term, depth) {
 
 
 function setup_graph( graph, term ) {
+    console.log(term);
     // Create the input graph
     var stylesheet_cy = cytoscape.stylesheet()
         .selector('node')
@@ -147,8 +148,21 @@ function setup_graph( graph, term ) {
         edges_cy = [];
         cy.destroy();
     }
-    process_parents( cy, graph, term, 0 );
-    process_parents_edges( cy, graph, term, 0 );
+
+    if(_.isArray(term)) {
+        _.each(term, function(m) {
+            console.log(m);
+            process_parents( cy, graph, m, 0 );
+            process_parents_edges( cy, graph, m, 0 );
+        });
+    }
+    else {
+        process_parents( cy, graph, term, 0 );
+        process_parents_edges( cy, graph, term, 0 );
+    }
+
+
+
 
 
     cy = cytoscape({
@@ -198,31 +212,36 @@ function setup_graph( graph, term ) {
 
 
 function download_and_setup_graph( term ) {
+    console.log('dl',term);
     var new_ontology;
+    var checkterm = term;
     if( !term ) {
         alert('term null');
         return;
     }
+    if(_.isArray(term)) {
+        checkterm = term[0];
+    }
 
 
     $.ajax({url: 'relationships.json', dataType: 'json'}).done(function(response) {
-        if( term.match(/^ECO:/) ) { new_ontology = 'evidence_ontology.json'; relationships = response.generic_relationships; }
-        else if( term.match(/^GO:/) ) { new_ontology = 'gene_ontology.json'; relationships = response.go_relationships; }
-        else if( term.match(/^SO:/) ) { new_ontology = 'sequence_ontology.json'; relationships = response.so_relationships; }
-        else if( term.match(/^CHEBI:/) ) { new_ontology = 'chebi.json'; relationships = response.chebi_relationships; }
-        else if( term.match(/^HP:/) ) { new_ontology = 'hp.json'; relationships = response.generic_relationships;  }
-        else if( term.match(/^DOID:/) ) { new_ontology = 'disease_ontology.json'; relationships = response.generic_relationships;  }
-        else if( term.match(/^PO:/) ) { new_ontology = 'plant_ontology.json'; relationships = response.po_relationships;  }
-        else if( term.match(/^TO:/) ) { new_ontology = 'plant_trait.json'; relationships = response.to_relationships;  }
-        else if( term.match(/^PATO:/) ) { new_ontology = 'pato.json'; relationships = response.pato_relationships;  }
-        else if( term.match(/^CL:/) ) { new_ontology = 'cell_ontology.json'; relationships = response.generic_relationships;  }
-        else if( term.match(/^ENVO:/) ) { new_ontology = 'envo-basic.json'; relationships = response.envo_relationships;  }
+        if( checkterm.match(/^ECO:/) ) { new_ontology = 'evidence_ontology.json'; relationships = response.generic_relationships; }
+        else if( checkterm.match(/^GO:/) ) { new_ontology = 'gene_ontology.json'; relationships = response.go_relationships; }
+        else if( checkterm.match(/^SO:/) ) { new_ontology = 'sequence_ontology.json'; relationships = response.so_relationships; }
+        else if( checkterm.match(/^CHEBI:/) ) { new_ontology = 'chebi.json'; relationships = response.chebi_relationships; }
+        else if( checkterm.match(/^HP:/) ) { new_ontology = 'hp.json'; relationships = response.generic_relationships;  }
+        else if( checkterm.match(/^DOID:/) ) { new_ontology = 'disease_ontology.json'; relationships = response.generic_relationships;  }
+        else if( checkterm.match(/^PO:/) ) { new_ontology = 'plant_ontology.json'; relationships = response.po_relationships;  }
+        else if( checkterm.match(/^TO:/) ) { new_ontology = 'plant_trait.json'; relationships = response.to_relationships;  }
+        else if( checkterm.match(/^PATO:/) ) { new_ontology = 'pato.json'; relationships = response.pato_relationships;  }
+        else if( checkterm.match(/^CL:/) ) { new_ontology = 'cell_ontology.json'; relationships = response.generic_relationships;  }
+        else if( checkterm.match(/^ENVO:/) ) { new_ontology = 'envo-basic.json'; relationships = response.envo_relationships;  }
         $('#legend').empty();
         relationships.forEach( function(elt) {
             $('#legend').append('<div style=\'height: 12px; width: 50px; background: ' + scales(elt) + '\'></div><div>' + elt + '</div>');
         });
         if( !new_ontology ) {
-            $('#loading').text('Error: ontology not found for ' + term);
+            $('#loading').text('Error: ontology not found for ' + checkterm);
         }  else if( new_ontology != ontology ) {
             ontology = new_ontology;
             $.ajax({url: ontology, dataType: 'json'}).done(function(response) {
@@ -285,14 +304,25 @@ $( function() {
         return false;
     });
 
-    $("#layout_form").submit(function (evt) {
-      $("#termform").submit();
-      return false;
-    });
-    $("#multi").submit(function (evt) {
-      $("#termform").submit();
-      return false;
+    $('#layout_form').submit(function(evt) {
+        $('#termform').submit();
+        return false;
     });
 
+    $('#multi').submit(function(evt) {
+        console.log($('#goterms').val());
+        var nodes = [];
+        var pvals = [];
+        $('#goterms').val().split('\n').forEach(function(line) {
+            var matches = line.split('\t');
+            if(matches.length == 2) {
+                console.log(matches[0],matches[1])
 
+                nodes.push(matches[0]);
+                pvals.push(matches[1]);
+            }
+        });
+        download_and_setup_graph(nodes);
+        return false;
+    });
 });
