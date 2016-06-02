@@ -18,8 +18,8 @@ var chroma = require('chroma-js');
 
 
 var depth_limit = 20;
-var nodes_cy = [];
-var edges_cy = [];
+var nodes_cy = {};
+var edges_cy = {};
 var node_scores = {};
 var relationships = [];
 var graph;
@@ -149,8 +149,8 @@ function setup_graph( graph, term ) {
             });
 
     if( setup ) {
-        nodes_cy = [];
-        edges_cy = [];
+        nodes_cy = {};
+        edges_cy = {};
         cy.destroy();
     }
 
@@ -203,10 +203,10 @@ function setup_graph( graph, term ) {
     var layout_cy = cy.makeLayout({
         name: layout.trim(),
         rankDir: 'BT',
+        edgeJaccardLength: 100 * Math.pow(_.size(nodes_cy) / 90, 1.1),
         padding: 50,
         randomize: true,
         animate: true,
-        infinite: true,
         repulsion: 1,
     });
 
@@ -294,7 +294,11 @@ function setup_event_handlers() {
     });
 
     $('#layout_form').submit(function(evt) {
-        $('#termform').submit();
+        if($('#goterms').val() != '') {
+            $('#multi').submit();
+        } else {
+            $('#termform').submit();
+        }
         return false;
     });
 
@@ -324,14 +328,14 @@ function setup_event_handlers() {
 }
 
 $( function() {
-    cydagre( cytoscape, dagre ); // Register extension
-    cyqtip( cytoscape, $ ); // Register extension
-    cycola( cytoscape, cola ); // Register extension
-    cydagre( cytoscape, dagre ); // Register extension
-    cyspringy( cytoscape, springy ); // Register extension
-    cyarbor( cytoscape, arbor ); // Register extension
-    cyspread( cytoscape ); // Register extension
-    cycose( cytoscape ); // Register extension
+    cydagre( cytoscape, dagre );
+    cyqtip( cytoscape, $ );
+    cycola( cytoscape, cola );
+    cydagre( cytoscape, dagre );
+    cyspringy( cytoscape, springy );
+    cyarbor( cytoscape, arbor );
+    cyspread( cytoscape );
+    cycose( cytoscape );
 
     // Check query params
     var terms = utils.getParameterByName('terms');
