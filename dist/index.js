@@ -183,7 +183,20 @@ function setup_graph( graph, term ) {
 
 
     cy.elements().qtip({
-        content: function(arg) { return '<b>' + this.data('id') + '</b><br />' + this.data('label') + (this.data('pval')?'<br />P-val: ' + this.data('pval'):''); },
+        content: function(arg) {
+            return (
+                    this.data('id').match(/^GO:/) ?
+                        '<b><a href="http://amigo.geneontology.org/amigo/term/' + this.data('id') + '">' + this.data('id') + '</a></b>' :
+                        '<b>' + this.data('id') + '</b>'
+                ) +
+                '<br />' +
+                this.data('label') +
+                (
+                    this.data('pval') ?
+                        '<br />P-val: ' + this.data('pval') :
+                        ''
+                );
+        },
         position: {
             my: 'top center',
             at: 'bottom center',
@@ -280,7 +293,7 @@ function setup_event_handlers() {
     });
 
     $('#save_button').on('click', function(e) {
-        $('#output').append($('<a/>').attr({href: cy.png({scale: 3})}).append('Download picture'));
+        $('#output').append($('<a/>').attr({href: cy.png({scale: 5})}).append('Download picture'));
     });
 
 
