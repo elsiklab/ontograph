@@ -184,7 +184,7 @@ function setup_graph( graph, term ) {
 
     cy.elements().qtip({
         content: function(arg) {
-            return (
+            return this.data('source') ? this.data('label') : (
                     this.data('id').match(/^GO:/) ?
                         '<b><a href="http://amigo.geneontology.org/amigo/term/' + this.data('id') + '">' + this.data('id') + '</a></b>' :
                         '<b>' + this.data('id') + '</b>'
@@ -195,7 +195,7 @@ function setup_graph( graph, term ) {
                     this.data('pval') ?
                         '<br />P-val: ' + this.data('pval') :
                         ''
-                );
+                )
         },
         position: {
             my: 'top center',
