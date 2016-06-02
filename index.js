@@ -136,6 +136,7 @@ function setup_graph( graph, term ) {
             .css({
                 'target-arrow-fill': '#333',
                 'target-arrow-shape': 'triangle',
+                'curve-style': 'bezier',
                 'target-arrow-color': '#333',
                 'line-color': function(elt) { return scales(elt.data('label')); },
                 width: 5,
