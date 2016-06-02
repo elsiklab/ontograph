@@ -137,7 +137,7 @@ function setup_graph( graph, term ) {
                 'target-arrow-fill': '#333',
                 'target-arrow-shape': 'triangle',
                 'curve-style': 'bezier',
-                'target-arrow-color': '#333',
+                'target-arrow-color': function(elt) { return scales(elt.data('label')); },
                 'line-color': function(elt) { return scales(elt.data('label')); },
                 width: 5,
             });
@@ -195,6 +195,8 @@ function setup_graph( graph, term ) {
     layout_cy.run();
 }
 
+
+
 function download_and_setup_graph( term ) {
     var new_ontology;
     if( !term ) {
@@ -242,6 +244,8 @@ function download_and_setup_graph( term ) {
         }
     });
 }
+
+
 $( function() {
     cydagre( cytoscape, dagre ); // Register extension
     cyqtip( cytoscape, $ ); // Register extension
@@ -275,22 +279,20 @@ $( function() {
     $('#searchform').submit(function() {
         var search = $('#search').val();
         var term = terms[search];
-        $('#term').val( term );
+        $('#term').val(term);
         window.history.replaceState( {}, '', '?term=' + term );
         download_and_setup_graph(term);
         return false;
     });
 
-    var terms = $('#goterms').val();
-
-    // Process textarea from form
-    var nodes = [];
-    var pvals = [];
-    terms.split('\n').forEach(function(line) {
-        var matches = line.split('\t');
-        console.log(matches[0],matches[1])
-
-        nodes.push(matches[0]);
-        pvals.push(matches[1]);
+    $("#layout_form").submit(function (evt) {
+      $("#termform").submit();
+      return false;
     });
+    $("#multi").submit(function (evt) {
+      $("#termform").submit();
+      return false;
+    });
+
+
 });

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
 <head>
   <meta name="generator" content="HTML Tidy for HTML5 for Mac OS X version 5.2.0">
@@ -93,31 +93,28 @@
   <div id="cy"></div>
   <p>Currently supported ontologies (with examples):</p>
   <ol>
-    <li><a href="." class="clink">ECO:0000104</a> - evidence ontology</li>
-    <li><a href="." class="clink">GO:0070060</a> - gene ontology</li>
-    <li><a href="." class="clink">SO:0000281</a> - sequence ontology</li>
-    <li><a href="." class="clink">CHEBI:15377</a> - chemical entities of biological interest</li>
-    <li><a href="." class="clink">HP:0004043</a> - human phenotype ontology</li>
-    <li><a href="." class="clink">DOID:14319</a> - human disease ontology</li>
-    <li><a href="." class="clink">PO:0005039</a> - plant ontology</li>
-    <li><a href="." class="clink">TO:0002694</a> - plant trait ontology</li>
-    <li><a href="." class="clink">PATO:0002051</a> - phenotypic quality ontology</li>
-    <li><a href="." class="clink">ENVO:00000151</a> - environment ontology (basic)</li>
-    <li><a href="." class="clink">CL:0002310</a> - cell ontology (basic)</li>
+    <li><a href="?term=ECO:0000104" class="clink">ECO:0000104</a> - evidence ontology</li>
+    <li><a href="?term=GO:0070060" class="clink">GO:0070060</a> - gene ontology</li>
+    <li><a href="?term=SO:0000281" class="clink">SO:0000281</a> - sequence ontology</li>
+    <li><a href="?term=CHEBI:15377" class="clink">CHEBI:15377</a> - chemical entities of biological interest</li>
+    <li><a href="?term=HP:0004043" class="clink">HP:0004043</a> - human phenotype ontology</li>
+    <li><a href="?term=DOID:14319" class="clink">DOID:14319</a> - human disease ontology</li>
+    <li><a href="?term=PO:0005039" class="clink">PO:0005039</a> - plant ontology</li>
+    <li><a href="?term=TO:0002694" class="clink">TO:0002694</a> - plant trait ontology</li>
+    <li><a href="?term=PATO:0002051" class="clink">PATO:0002051</a> - phenotypic quality ontology</li>
+    <li><a href="?term=ENVO:00000151" class="clink">ENVO:00000151</a> - environment ontology (basic)</li>
+    <li><a href="?term=CL:0002310" class="clink">CL:0002310</a> - cell ontology (basic)</li>
   </ol>
+  <a href="https://github.com/cmdcolin/ontograph">Github</a>
+
   <script type="text/javascript">
   $("a.clink").click(function (evt) {
     $("#term").val(evt.target.text);
     $("#termform").submit();
     return false;
   });
-
-  $("#layout_form").submit(function (evt) {
-    $("#termform").submit();
-    return false;
-  });
-
-  </script><a href="https://github.com/cmdcolin/ontograph">Github</a> 
+  </script>
+  
   <script src="index.js" type="text/javascript">
   </script> 
   <script type="text/javascript">
