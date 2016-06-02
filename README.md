@@ -1,5 +1,8 @@
 # Ontograph
 
+[![Build Status](https://travis-ci.org/cmdcolin/ontograph.svg?branch=master)](https://travis-ci.org/cmdcolin/ontograph)
+
+
 An ontology based DAG graph using cytoscape.js and the dagre layout, inspired by BioJS DAGViewer
 
 
