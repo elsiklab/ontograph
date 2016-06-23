@@ -3,6 +3,7 @@ var cydagre = require('cytoscape-dagre');
 var cyqtip = require('cytoscape-qtip');
 var panzoom = require('cytoscape-panzoom');
 var dagre = require('dagre');
+var treemode = require('tree-model');
 
 
 var _ = require('underscore');
@@ -111,18 +112,15 @@ function setupGraph(graph, term) {
     var stylesheetCy = cytoscape.stylesheet()
         .selector('node')
             .style({
-                content: 'data(label)',
+                'content': 'data(label)',
                 'text-valign': 'center',
-                'background-color': function (elt) {
-                    var maxval = -Math.log(_.min(_.values(nodeScores)));
-                    return elt.data('score') ? `hsl(${elt.data('score') * 150 / maxval},50%,50%)` : '#fff';
-                },
+                'background-color': (elt) => elt.data('score') ? `hsl(${elt.data('score') * 150 / -Math.log(_.min(_.values(nodeScores)))},50%,50%)` : '#fff',
                 'border-color': '#333',
                 'border-width': 5,
-                shape: 'rectangle',
+                'shape': 'rectangle',
                 'text-max-width': '1000px',
                 'text-wrap': 'wrap',
-                width: 'label',
+                'width': 'label',
                 'padding-left': '9px',
                 'padding-bottom': '9px',
                 'padding-right': '9px',
@@ -136,7 +134,7 @@ function setupGraph(graph, term) {
                 'curve-style': 'bezier',
                 'target-arrow-color': (elt) => scales(elt.data('label')),
                 'line-color': (elt) => scales(elt.data('label')),
-                width: 5,
+                'width': 5,
             });
 
     if (setup) {
@@ -189,19 +187,19 @@ function setupGraph(graph, term) {
     setup = true;
 
     cygraph.elements().qtip({
-        content: function () { return this.data('label'); },
+        content: function () { return `<b>${this.data('id')}</b><br />${this.data('label')}<br />${this.data('pval')?'pval: '+this.data('pval'):''}`; },
         position: {
             my: 'top center',
-            at: 'bottom center',
+            at: 'bottom center'
         },
         style: {
             classes: 'qtip-bootstrap',
             'font-family': 'sans-serif',
             tip: {
                 width: 16,
-                height: 8,
-            },
-        },
+                height: 8
+            }
+        }
     });
 
     // Manually crate and stop layout after timeout
@@ -211,7 +209,9 @@ function setupGraph(graph, term) {
         padding: 50,
         randomize: true,
         animate: true,
-        repulsion: 1,
+        nodeSep: 1,
+        edgeSep: 1,
+        repulsion: 1
     });
 
     layoutCy.run();
@@ -312,7 +312,7 @@ function setupEventHandlers() {
             .val()
             .split('\n')
             .forEach((line) => {
-                var matches = line.split('\\s+');
+                var matches = line.split(/\s+/);
                 if (matches.length === 2) {
                     nodes.push(matches[0]);
                     pvals.push(matches[1]);
@@ -321,6 +321,19 @@ function setupEventHandlers() {
             });
         window.history.replaceState({}, '', `?terms=${nodes.join(',')}&pvals=${pvals.join(',')}`);
         downloadAndSetupGraph(nodes, pvals);
+        return false;
+    });
+
+    $('#edgesep,#nodesep').change(() => {
+        cygraph.layout({
+            name: 'dagre',
+            rankDir: 'BT',
+            padding: 50,
+            randomize: true,
+            animate: true,
+            nodeSep: $("#nodesep").val(),
+            edgeSep: $("#edgesep").val()
+        });
         return false;
     });
 }

@@ -11,9 +11,9 @@ gulp.task('inlinecss', () => {
         .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('build', () => {
+gulp.task('build', ['inlinecss'], () => {
     gulp.src([
-        'relationships.json',
+        'relationships.json'
     ]).pipe(gulp.dest('dist'));
 
 
@@ -29,9 +29,9 @@ gulp.task('build', () => {
     return 1;
 });
 
-gulp.task('debug', () => {
+gulp.task('debug', ['inlinecss'], () => {
     gulp.src([
-        'relationships.json',
+        'relationships.json'
     ]).pipe(gulp.dest('dist'));
 
 
