@@ -266,14 +266,19 @@
     <label for="term">Search an ontology term or identifier directly:</label> <input type="text" id="term" class=
     "ui-widget"> <button type="submit">Submit</button>
   </form>
-  <form id="searchform" name="searchform" action="">
+  
+  <form id="searchform" action="">
     <label for="search">Search for an ontology term from it's description:</label> <input type="text" id="search"
     class="ui-widget"> <button type="submit">Submit</button>
   </form>
-  <form id="multi" name="multi" action="">
+  <form id="multi" action="">
     <label for="goterms">Submit multiple GO terms with scores:</label> 
     <textarea id="goterms" cols="40" rows="10"></textarea> <button type="submit">Submit</button>
-  </form><button id="save_button">Save PNG</button>
+  </form>
+
+  <label for="nodesep">Node separation</label> <input type="number" id="nodesep" value="1" /><br />
+  <label for="edgesep">Edge separation</label> <input type="number" id="edgesep" value="1" /><br />
+  <button id="save_button">Save PNG</button>
   <div id="output"></div>
   <p id="loading"></p>
   <div id="legend"></div>
