@@ -6,6 +6,7 @@
     "indent": ["error", 4],
     "max-len": ["error", 200, 4],
     "vars-on-top": 0,
+    "prefer-arrow-callback": 0,
     "func-names": 0
   },
   "globals": {

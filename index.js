@@ -189,7 +189,7 @@ function setupGraph(graph, term) {
     setup = true;
 
     cygraph.elements().qtip({
-        content: function() { return this.data('label') },
+        content: function () { return this.data('label'); },
         position: {
             my: 'top center',
             at: 'bottom center',
@@ -355,4 +355,3 @@ $(() => {
 
     setupEventHandlers();
 });
-
