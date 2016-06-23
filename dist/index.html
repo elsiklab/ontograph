@@ -4,9 +4,8 @@
   <meta name="generator" content="HTML Tidy for HTML5 for Mac OS X version 5.2.0">
   <title>Ontograph</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" type="text/css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
-
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
   <style>.cy-panzoom {
 	position: absolute;
 	font-size: 12px;
@@ -264,10 +263,12 @@
 <body>
   <h1>Ontograph: An ontology viewer</h1>
   <form id="termform" name="termform" action="">
-    <label for="term">Search an ontology term or identifier directly:</label> <input type="text" id="term" class="ui-widget"> <button type="submit">Submit</button>
+    <label for="term">Search an ontology term or identifier directly:</label> <input type="text" id="term" class=
+    "ui-widget"> <button type="submit">Submit</button>
   </form>
   <form id="searchform" name="searchform" action="">
-    <label for="search">Search for an ontology term from it's description:</label> <input type="text" id="search" class="ui-widget"> <button type="submit">Submit</button>
+    <label for="search">Search for an ontology term from it's description:</label> <input type="text" id="search"
+    class="ui-widget"> <button type="submit">Submit</button>
   </form>
   <form id="multi" name="multi" action="">
     <label for="goterms">Submit multiple GO terms with scores:</label> 
@@ -279,28 +280,47 @@
   <div id="cy"></div>
   <p>Currently supported ontologies (with examples):</p>
   <ol>
-    <li><a href="?term=ECO:0000104" class="clink">ECO:0000104</a> - evidence ontology</li>
-    <li><a href="?term=GO:0070060" class="clink">GO:0070060</a> - gene ontology</li>
-    <li><a href="?term=SO:0000281" class="clink">SO:0000281</a> - sequence ontology</li>
-    <li><a href="?term=CHEBI:15377" class="clink">CHEBI:15377</a> - chemical entities of biological interest</li>
-    <li><a href="?term=HP:0004043" class="clink">HP:0004043</a> - human phenotype ontology</li>
-    <li><a href="?term=DOID:14319" class="clink">DOID:14319</a> - human disease ontology</li>
-    <li><a href="?term=PO:0005039" class="clink">PO:0005039</a> - plant ontology</li>
-    <li><a href="?term=TO:0002694" class="clink">TO:0002694</a> - plant trait ontology</li>
-    <li><a href="?term=PATO:0002051" class="clink">PATO:0002051</a> - phenotypic quality ontology</li>
-    <li><a href="?term=ENVO:00000151" class="clink">ENVO:00000151</a> - environment ontology (basic)</li>
-    <li><a href="?term=CL:0002310" class="clink">CL:0002310</a> - cell ontology (basic)</li>
-  </ol>
-  <a href="https://github.com/cmdcolin/ontograph">Github</a>
-
+    <li>
+      <a href="?term=ECO:0000104" class="clink">ECO:0000104</a> - evidence ontology
+    </li>
+    <li>
+      <a href="?term=GO:0070060" class="clink">GO:0070060</a> - gene ontology
+    </li>
+    <li>
+      <a href="?term=SO:0000281" class="clink">SO:0000281</a> - sequence ontology
+    </li>
+    <li>
+      <a href="?term=CHEBI:15377" class="clink">CHEBI:15377</a> - chemical entities of biological interest
+    </li>
+    <li>
+      <a href="?term=HP:0004043" class="clink">HP:0004043</a> - human phenotype ontology
+    </li>
+    <li>
+      <a href="?term=DOID:14319" class="clink">DOID:14319</a> - human disease ontology
+    </li>
+    <li>
+      <a href="?term=PO:0005039" class="clink">PO:0005039</a> - plant ontology
+    </li>
+    <li>
+      <a href="?term=TO:0002694" class="clink">TO:0002694</a> - plant trait ontology
+    </li>
+    <li>
+      <a href="?term=PATO:0002051" class="clink">PATO:0002051</a> - phenotypic quality ontology
+    </li>
+    <li>
+      <a href="?term=ENVO:00000151" class="clink">ENVO:00000151</a> - environment ontology (basic)
+    </li>
+    <li>
+      <a href="?term=CL:0002310" class="clink">CL:0002310</a> - cell ontology (basic)
+    </li>
+  </ol><a href="https://github.com/cmdcolin/ontograph">Github</a> 
   <script type="text/javascript">
   $("a.clink").click(function (evt) {
     $("#term").val(evt.target.text);
     $("#termform").submit();
     return false;
   });
-  </script>
-  
+  </script> 
   <script src="index.js" type="text/javascript">
   </script> 
   <script type="text/javascript">

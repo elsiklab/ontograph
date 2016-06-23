@@ -34,7 +34,7 @@
     "cytoscape-qtip": "^2.4.0",
     "dagre": "^0.7.4",
     "font-awesome": "^4.6.3",
-    "jquery": "^3.0.0",
+    "jquery": "^2.2.4",
     "qtip2": "^3.0.3",
     "springy": "^2.7.1",
     "underscore": "^1.8.3"
