@@ -3,8 +3,10 @@ addons:
     packages:
     - tidy
 install:
-    - npm install eslint jscs
+    - npm install eslint eslint-config-airbnb
+before_script:
+    - npm install
 script:
-    - tidy index.html
-    - jscs index.js
     - eslint index.js
+after_script:
+    - tidy index.html

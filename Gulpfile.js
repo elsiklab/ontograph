@@ -1,74 +1,63 @@
 var gulp = require('gulp');
-var gulp_uglify = require('gulp-uglify');
-var gulp_rename = require('gulp-rename');
-var gulp_concat = require('gulp-concat');
-var gulp_browserify = require('gulp-browserify');
-
-gulp.task('build', function() {
-  gulp.src([
-    'js/*.js'
-  ]).pipe(gulp.dest('dist/js'))
-
-  gulp.src([
-    'css/*.css'
-  ]).pipe(gulp.dest('dist/css'))
+var uglify = require('gulp-uglify');
+var browserify = require('gulp-browserify');
+var smoosh = require('gulp-smoosher');
+var babel = require('gulp-babel');
 
 
-  gulp.src([
-    '*.html',
-    '*.json'
-  ]).pipe(gulp.dest('dist'))
+gulp.task('inlinecss', () => {
+    return gulp.src('index.html')
+        .pipe(smoosh())
+        .pipe(gulp.dest('dist/'));
+});
+
+gulp.task('build', () => {
+    gulp.src([
+        'relationships.json',
+    ]).pipe(gulp.dest('dist'));
 
 
-  gulp.src([
-    'index.js'
-  ]).pipe(gulp_browserify())
-    .pipe(gulp_uglify())
+    gulp.src([
+        'index.js',
+    ])
+    .pipe(babel({ presets: ['es2015'] }))
+    .pipe(browserify())
+    .pipe(uglify())
     .pipe(gulp.dest('dist'));
 
 
-  return 1
+    return 1;
 });
 
+gulp.task('debug', () => {
+    gulp.src([
+        'relationships.json',
+    ]).pipe(gulp.dest('dist'));
 
 
-gulp.task('debug', function() {
-  gulp.src([
-    'js/*.js'
-  ]).pipe(gulp.dest('dist/js'))
-
-
-  gulp.src([
-    '*.html',
-    '*.json'
-  ]).pipe(gulp.dest('dist'))
-
-
-  gulp.src([
-    'index.js'
-  ]).pipe(gulp_browserify())
+    gulp.src([
+        'index.js',
+    ])
+    .pipe(babel({ presets: ['es2015'] }))
+    .pipe(browserify())
     .pipe(gulp.dest('dist'));
 
 
-  return 1
+    return 1;
 });
 
-gulp.task('default', ['build']);
-gulp.task('devmode', ['debug']);
-gulp.task('watch', function() {
-  gulp.watch('js/*.js', ['default']);
-  gulp.watch('index.js', ['default']);
-  gulp.watch('index.html', ['default']);
-});
-gulp.task('watchdev', function() {
-  gulp.watch('js/*.js', ['debug']);
-  gulp.watch('index.js', ['debug']);
-  gulp.watch('index.html', ['debug']);
-});
+gulp.task('default', ['build', 'inlinecss']);
+gulp.task('devmode', ['debug', 'inlinecss']);
 
 
-// Handle the error
-function errorHandler (error) {
-  console.log(error.toString());
-  this.emit('end');
-}
+gulp.task('watch', () => {
+    gulp.watch('js/*.js', ['default']);
+    gulp.watch('index.js', ['default']);
+    gulp.watch('index.html', ['default']);
+});
+gulp.task('watchdev', () => {
+    gulp.watch('js/*.js', ['debug']);
+    gulp.watch('index.js', ['debug']);
+    gulp.watch('index.html', ['debug']);
+});
+
