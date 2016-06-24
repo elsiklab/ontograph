@@ -3,9 +3,6 @@ var cydagre = require('cytoscape-dagre');
 var cyqtip = require('cytoscape-qtip');
 var panzoom = require('cytoscape-panzoom');
 var dagre = require('dagre');
-var treemode = require('tree-model');
-
-
 var _ = require('underscore');
 var utils = require('./js/util.js');
 var chroma = require('chroma-js');
@@ -209,8 +206,8 @@ function setupGraph(graph, term) {
         padding: 50,
         randomize: true,
         animate: true,
-        nodeSep: 1,
-        edgeSep: 1,
+        nodeSep: $('#nodesep').val(),
+        edgeSep: $('#edgesep').val(),
         repulsion: 1
     });
 
@@ -368,3 +365,5 @@ $(() => {
 
     setupEventHandlers();
 });
+
+window.downloadAndSetupGraph = downloadAndSetupGraph;

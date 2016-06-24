@@ -58,7 +58,7 @@
     <textarea id="goterms" cols="40" rows="10"></textarea> <button type="submit">Submit</button>
   </form>
 
-  <label for="nodesep">Node separation</label> <input type="number" id="nodesep" value="1" /><br />
+  <label for="nodesep">Node separation (negative values=less broad tree)</label> <input type="number" id="nodesep" value="-10" /><br />
   <label for="edgesep">Edge separation</label> <input type="number" id="edgesep" value="1" /><br />
   <button id="save_button">Save PNG</button>
   <div id="output"></div>
@@ -102,11 +102,15 @@
     </li>
   </ol><a href="https://github.com/cmdcolin/ontograph">Github</a> 
   <script type="text/javascript">
-  $("a.clink").click(function (evt) {
-    $("#term").val(evt.target.text);
-    $("#termform").submit();
-    return false;
-  });
+ 
+  $(function() {
+      $("a.clink").click(function (evt) {
+        $("#term").val(evt.target.text);
+        $("#termform").submit();
+        return false;
+      });
+      downloadAndSetupGraph("GO:0070060");
+  })
   </script> 
   <script src="index.js" type="text/javascript">
   </script> 
