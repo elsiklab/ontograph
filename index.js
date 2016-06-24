@@ -109,15 +109,15 @@ function setupGraph(graph, term) {
     var stylesheetCy = cytoscape.stylesheet()
         .selector('node')
             .style({
-                'content': 'data(label)',
+                content: 'data(label)',
                 'text-valign': 'center',
-                'background-color': (elt) => elt.data('score') ? `hsl(${elt.data('score') * 150 / -Math.log(_.min(_.values(nodeScores)))},50%,50%)` : '#fff',
+                'background-color': (elt) => (elt.data('score') ? `hsl(${elt.data('score') * 150 / -Math.log(_.min(_.values(nodeScores)))},50%,50%)` : '#fff'),
                 'border-color': '#333',
                 'border-width': 5,
-                'shape': 'rectangle',
+                shape: 'rectangle',
                 'text-max-width': '1000px',
                 'text-wrap': 'wrap',
-                'width': 'label',
+                width: 'label',
                 'padding-left': '9px',
                 'padding-bottom': '9px',
                 'padding-right': '9px',
@@ -131,7 +131,7 @@ function setupGraph(graph, term) {
                 'curve-style': 'bezier',
                 'target-arrow-color': (elt) => scales(elt.data('label')),
                 'line-color': (elt) => scales(elt.data('label')),
-                'width': 5,
+                width: 5,
             });
 
     if (setup) {
@@ -184,19 +184,19 @@ function setupGraph(graph, term) {
     setup = true;
 
     cygraph.elements().qtip({
-        content: function () { return `<b>${this.data('id')}</b><br />${this.data('label')}<br />${this.data('pval')?'pval: '+this.data('pval'):''}`; },
+        content: function () { return `<b>${this.data('id')}</b><br />${this.data('label')}<br />${this.data('pval') ? `pval: ${this.data('pval')}` : ''}`; },
         position: {
             my: 'top center',
-            at: 'bottom center'
+            at: 'bottom center',
         },
         style: {
             classes: 'qtip-bootstrap',
             'font-family': 'sans-serif',
             tip: {
                 width: 16,
-                height: 8
-            }
-        }
+                height: 8,
+            },
+        },
     });
 
     // Manually crate and stop layout after timeout
@@ -208,7 +208,7 @@ function setupGraph(graph, term) {
         animate: true,
         nodeSep: $('#nodesep').val(),
         edgeSep: $('#edgesep').val(),
-        repulsion: 1
+        repulsion: 1,
     });
 
     layoutCy.run();
@@ -328,8 +328,8 @@ function setupEventHandlers() {
             padding: 50,
             randomize: true,
             animate: true,
-            nodeSep: $("#nodesep").val(),
-            edgeSep: $("#edgesep").val()
+            nodeSep: $('#nodesep').val(),
+            edgeSep: $('#edgesep').val(),
         });
         return false;
     });
