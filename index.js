@@ -4,7 +4,7 @@ var cyqtip = require('cytoscape-qtip');
 var panzoom = require('cytoscape-panzoom');
 var dagre = require('dagre');
 var _ = require('underscore');
-var utils = require('./js/util.js');
+var utils = require('./js/util');
 var chroma = require('chroma-js');
 
 
@@ -43,7 +43,7 @@ function processParents(cy, graph, term, depth) {
             data: {
                 id: term,
                 label: utils.explode(node.description, 22),
-                score: -Math.log(nodeScores[term]),
+                score: -Math.log(nodeScores[term]) * 150,
                 pval: nodeScores[term],
             },
         };
@@ -111,7 +111,7 @@ function setupGraph(graph, term) {
             .style({
                 content: 'data(label)',
                 'text-valign': 'center',
-                'background-color': (elt) => (elt.data('score') ? `hsl(${elt.data('score') * 150 / -Math.log(_.min(_.values(nodeScores)))},50%,50%)` : '#fff'),
+                'background-color': (elt) => (elt.data('score') ? `hsl(${elt.data('score') / -Math.log(_.min(_.values(nodeScores)))}, 50%, 50%)` : '#fff'),
                 'border-color': '#333',
                 'border-width': 5,
                 shape: 'rectangle',
