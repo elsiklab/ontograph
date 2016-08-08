@@ -289,7 +289,7 @@ function setupEventHandlers() {
     });
 
     $('#save_button').on('click', () => {
-        $('#output').append($('<a/>').attr({ href: cygraph.png({ scale: 5 }) }).append('Download picture'));
+        $('#output').empty().append($('<a/>').attr({ href: cygraph.png({ scale: 5 }) }).append('Download picture'));
     });
 
 
@@ -361,9 +361,9 @@ $(() => {
     } else if (term) {
         $('#term').val(term);
         downloadAndSetupGraph(term);
+    } else if ($('#term').val()) {
+        downloadAndSetupGraph($('#term').val());
     }
 
     setupEventHandlers();
 });
-
-window.downloadAndSetupGraph = downloadAndSetupGraph;

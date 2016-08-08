@@ -1,3 +1,7 @@
+Version 0.3.1
+
+- Fixed a bug where the graph would always reset to a demo despite URL params
+
 Version 0.3.0
 
 - Added searchbox
