@@ -1,3 +1,9 @@
+Version 0.3.2
+
+- Added "single.html" which does not include the various UI elements
+- Updated ontologies to latest versions
+- Removed plant trait ontology
+
 Version 0.3.1
 
 - Fixed a bug where the graph would always reset to a demo despite URL params
