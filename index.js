@@ -241,8 +241,6 @@ function downloadAndSetupGraph(term, pval) {
             newOntology = 'disease_ontology.json'; relationships = response.generic_relationships;
         } else if (checkterm.match(/^PO:/)) {
             newOntology = 'plant_ontology.json'; relationships = response.po_relationships;
-        } else if (checkterm.match(/^TO:/)) {
-            newOntology = 'plant_trait.json'; relationships = response.to_relationships;
         } else if (checkterm.match(/^PATO:/)) {
             newOntology = 'pato.json'; relationships = response.pato_relationships;
         } else if (checkterm.match(/^CL:/)) {
@@ -292,14 +290,15 @@ function setupEventHandlers() {
         var png = cygraph.png({ scale: 2 });
         var canvas = $('<canvas/>', { id: 'tmpcan' });
         var ctx = canvas[0].getContext('2d');
-        var data = 'data:image/svg+xml,' +
-                   "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='600'>" +
-                     "<foreignObject width='100%' height='100%'>" +
-                       "<div xmlns='http://www.w3.org/1999/xhtml' style='font-size:12px'>" +
-                           $("#legend").html() +
-                       '</div>' +
-                     '</foreignObject>' +
-                   '</svg>';
+        var legendHTML = $('#legend').html();
+        var data = `
+            data:image/svg+xml,
+            <svg xmlns='http://www.w3.org/2000/svg' width='200' height='600'>
+                <foreignObject width='100%' height='100%'>
+                <div xmlns='http://www.w3.org/1999/xhtml' style='font-size:12px'>${legendHTML}</div>
+                </foreignObject>
+            </svg>
+        `;
 
         var img = new Image();
         img.src = png;

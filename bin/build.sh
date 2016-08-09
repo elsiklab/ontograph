@@ -24,6 +24,5 @@ set -v
 [ -f dist/disease_ontology.json ] || scripts/read-obo.pl obo_files/doid.obo > dist/disease_ontology.json
 [ -f dist/plant_ontology.json ] || scripts/read-obo.pl obo_files/po.obo > dist/plant_ontology.json
 [ -f dist/pato.json ] || scripts/read-obo.pl obo_files/pato.obo > dist/pato.json
-[ -f dist/plant_trait.json ] || scripts/read-obo.pl obo_files/to.obo > dist/plant_trait.json
 [ -f dist/cell_ontology.json ] || scripts/read-obo.pl obo_files/cl-basic.obo > dist/cell_ontology.json
 [ -f dist/envo-basic.json ] || scripts/read-obo.pl obo_files/envo-basic.obo > dist/envo-basic.json

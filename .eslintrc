@@ -16,6 +16,7 @@
     "console": true,
     "Whammy": true,
     "cola": true,
-    "arbor": true
+    "arbor": true,
+    "Image": true
   }
 }
