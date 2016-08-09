@@ -6,7 +6,7 @@ var babel = require('gulp-babel');
 
 
 gulp.task('inlinecss', () => {
-    return gulp.src('index.html')
+    return gulp.src(['index.html','single.html'])
         .pipe(smoosh())
         .pipe(gulp.dest('dist/'));
 });

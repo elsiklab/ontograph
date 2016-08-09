@@ -289,7 +289,28 @@ function setupEventHandlers() {
     });
 
     $('#save_button').on('click', () => {
-        $('#output').empty().append($('<a/>').attr({ href: cygraph.png({ scale: 5 }) }).append('Download picture'));
+        var png = cygraph.png({ scale: 2 });
+        var canvas = $('<canvas/>', { id: 'tmpcan' });
+        var ctx = canvas[0].getContext('2d');
+        var data = 'data:image/svg+xml,' +
+                   "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='600'>" +
+                     "<foreignObject width='100%' height='100%'>" +
+                       "<div xmlns='http://www.w3.org/1999/xhtml' style='font-size:12px'>" +
+                           $("#legend").html() +
+                       '</div>' +
+                     '</foreignObject>' +
+                   '</svg>';
+
+        var img = new Image();
+        img.src = png;
+        canvas[0].width = img.width + 400;
+        canvas[0].height = img.height;
+        ctx.drawImage(img, 400, 0);
+
+        img.src = data;
+        ctx.drawImage(img, 100, 100, img.width * 3, img.height * 3);
+        var dataURL = canvas[0].toDataURL('image/png');
+        $('#output').empty().append($('<a/>').attr({ href: dataURL }).append('Download picture'));
     });
 
 
