@@ -20,15 +20,13 @@ $graph->iterate(
         my $ni     = shift;
         my $output = {};
         if (   $ni->{term}->{is_root}
-            && !$ni->{term}->{is_obsolete}
-            && !$ni->{term}->{is_relationship_type})
+            && !$ni->{term}->{is_obsolete})
         {
             $output->{description} = $ni->{term}->{name};
             $output_graph->{$ni->{term}->{acc}} = $output;
         }
         if (   !$ni->{term}->{is_root}
-            && !$ni->{term}->{is_obsolete}
-            && !$ni->{term}->{is_relationship_type})
+            && !$ni->{term}->{is_obsolete})
         {
             my $term_lref = $graph->get_parent_terms($ni->{term}->{acc});
             my @parent_terms = map { $_->{acc} } @$term_lref;

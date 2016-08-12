@@ -14,6 +14,7 @@ set -v
 [ -f obo_files/to.obo ] || wget -P obo_files http://purl.obolibrary.org/obo/to.obo
 [ -f obo_files/cl-basic.obo ] || wget -P obo_files https://raw.githubusercontent.com/obophenotype/cell-ontology/master/cl-basic.obo
 [ -f obo_files/envo-basic.obo ] || wget -P obo_files https://raw.githubusercontent.com/EnvironmentOntology/envo/master/subsets/envo-basic.obo
+[ -f obo_files/ro.obo ] || wget -P obo_files http://purl.obolibrary.org/obo/ro.obo
 
 
 [ -f dist/gene_ontology.json ] || scripts/read-obo.pl obo_files/go.obo > dist/gene_ontology.json
@@ -26,3 +27,4 @@ set -v
 [ -f dist/pato.json ] || scripts/read-obo.pl obo_files/pato.obo > dist/pato.json
 [ -f dist/cell_ontology.json ] || scripts/read-obo.pl obo_files/cl-basic.obo > dist/cell_ontology.json
 [ -f dist/envo-basic.json ] || scripts/read-obo.pl obo_files/envo-basic.obo > dist/envo-basic.json
+[ -f dist/ro.json ] || scripts/read-obo.pl obo_files/ro.obo > dist/ro.json

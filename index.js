@@ -247,6 +247,8 @@ function downloadAndSetupGraph(term, pval) {
             newOntology = 'cell_ontology.json'; relationships = response.generic_relationships;
         } else if (checkterm.match(/^ENVO:/)) {
             newOntology = 'envo-basic.json'; relationships = response.envo_relationships;
+        } else if (checkterm.match(/^RO:/)) {
+            newOntology = 'ro.json'; relationships = response.generic_relationships;
         }
         $('#legend').empty();
         relationships.forEach((elt) => {
