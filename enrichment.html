@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta name="generator" content="HTML Tidy for HTML5 for Mac OS X version 5.2.0">
-  <title>Ontograph</title>
+  <title>Ontograph - enrichment widget</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
@@ -261,58 +261,49 @@
   </style>
 </head>
 <body>
-  <h1>Ontograph: An ontology viewer</h1>
-  <form id="termform" name="termform" action="">
-    <label for="term">Search an ontology term or identifier directly:</label> <input type="text" id="term" class=
-    "ui-widget" value="GO:0070060"> <button type="submit">Submit</button>
-  </form>
-  <form id="searchform" action="" name="searchform">
-    <label for="search">Search for an ontology term from it's description:</label> <input type="text" id="search"
-    class="ui-widget"> <button type="submit">Submit</button>
+  <h1>Ontograph: An ontology viewer - enrichment widget</h1>
+  <form id="multi" action="" name="multi">
+    <label for="goterms">Submit two column tab separated file with terms and score:</label> 
+    <textarea id="goterms" cols="40" rows="10">GO:0034220  5.14820022241201e-131
+GO:0015992  5.14820022241201e-131
+GO:0009206  5.14820022241201e-131
+GO:0009145  5.14820022241201e-131
+GO:0006754  5.14820022241201e-131
+GO:0015985  5.14820022241201e-131
+GO:0015986  5.14820022241201e-131
+GO:0009201  5.14820022241201e-131
+GO:0009142  5.14820022241201e-131
+GO:0006414  5.14820022241201e-131
+GO:0006818  5.14820022241201e-131
+GO:0046034  5.14820022241201e-131
+GO:0009205  5.14820022241201e-131
+GO:0009144  5.14820022241201e-131
+GO:0009141  5.14820022241201e-131
+GO:0009199  5.14820022241201e-131
+GO:0055085  5.14820022241201e-131
+GO:0042273  1.03404365655219e-129
+GO:0042255  1.03404365655219e-129
+GO:0000027  1.03404365655219e-129
+GO:0042777  5.50161108174046e-118
+GO:0022618  8.50295413530387e-93
+GO:0042026  2.53469490430836e-89
+GO:0009208  2.8946403116483e-63
+GO:0009209  2.8946403116483e-63
+GO:0046051  2.8946403116483e-63
+GO:0006241  2.8946403116483e-63
+GO:0046036  2.8946403116483e-63
+GO:0006228  2.8946403116483e-63
+GO:0006183  2.8946403116483e-63
+GO:0006662  2.13886596489954e-62
+GO:0010608  1.4043787324419e-54
+GO:0006417  2.08428284258175e-52</textarea> <button type="submit">Submit</button>
   </form>
   <button id="save_button">Save PNG</button>
   <div id="output"></div>
   <p id="loading"></p>
   <div id="legend"></div>
   <div id="cy"></div>
-  <p>Currently supported ontologies (with examples):</p>
-  <ol>
-    <li>
-      <a href="?term=ECO:0000104" class="clink">ECO:0000104</a> - evidence ontology
-    </li>
-    <li>
-      <a href="?term=GO:0070060" class="clink">GO:0070060</a> - gene ontology
-    </li>
-    <li>
-      <a href="?term=SO:0000281" class="clink">SO:0000281</a> - sequence ontology
-    </li>
-    <li>
-      <a href="?term=CHEBI:15377" class="clink">CHEBI:15377</a> - chemical entities of biological interest
-    </li>
-    <li>
-      <a href="?term=HP:0004043" class="clink">HP:0004043</a> - human phenotype ontology
-    </li>
-    <li>
-      <a href="?term=DOID:14319" class="clink">DOID:14319</a> - human disease ontology
-    </li>
-    <li>
-      <a href="?term=PO:0005039" class="clink">PO:0005039</a> - plant ontology
-    </li>
-    <li>
-      <a href="?term=PATO:0002051" class="clink">PATO:0002051</a> - phenotypic quality ontology
-    </li>
-    <li>
-      <a href="?term=ENVO:00000151" class="clink">ENVO:00000151</a> - environment ontology (basic)
-    </li>
-    <li>
-      <a href="?term=CL:0002310" class="clink">CL:0002310</a> - cell ontology (basic)
-    </li>
-    <li>
-      <a href="?term=RO:0002211" class="clink">RO:0002211</a> - relationship ontology
-    </li>
-  </ol><a href="https://github.com/cmdcolin/ontograph">Github</a><br />
-  <a href="single.html?term=GO:0070060">View simple widget</a><br />
-  <a href="enrichment.html">View enrichment widget</a>
+  <a href="https://github.com/cmdcolin/ontograph">Github</a> 
   <script type="text/javascript">
   $(function() {
       $("a.clink").click(function (evt) {
