@@ -52,15 +52,6 @@
     <label for="search">Search for an ontology term from it's description:</label> <input type="text" id="search"
     class="ui-widget"> <button type="submit">Submit</button>
   </form>
-  <form id="multi" action="" name="multi">
-    <label for="goterms">Submit multiple GO terms with scores:</label> 
-    <textarea id="goterms" cols="40" rows="10"></textarea> <button type="submit">Submit</button>
-  </form>
-  <form id="graphlayout" action="" name="graphlayout">
-    <label for="nodesep">Node separation (negative values=less broad tree)</label>
-    <input type="number" id="nodesep" value="1"><br>
-    <label for="edgesep">Edge separation</label> <input type="number" id="edgesep" value="1"><br>
-  </form>
   <button id="save_button">Save PNG</button>
   <div id="output"></div>
   <p id="loading"></p>
@@ -101,7 +92,9 @@
     <li>
       <a href="?term=RO:0002211" class="clink">RO:0002211</a> - relationship ontology
     </li>
-  </ol><a href="https://github.com/cmdcolin/ontograph">Github</a> 
+  </ol><a href="https://github.com/cmdcolin/ontograph">Github</a><br />
+  <a href="single.html?term=GO:0070060">View simple widget</a><br />
+  <a href="enrichment.html">View enrichment widget</a>
   <script type="text/javascript">
   $(function() {
       $("a.clink").click(function (evt) {

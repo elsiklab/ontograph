@@ -206,8 +206,6 @@ function setupGraph(graph, term) {
         padding: 50,
         randomize: true,
         animate: true,
-        nodeSep: $('#nodesep').val(),
-        edgeSep: $('#edgesep').val(),
         repulsion: 1,
     });
 
@@ -340,19 +338,6 @@ function setupEventHandlers() {
             });
         window.history.replaceState({}, '', `?terms=${nodes.join(',')}&pvals=${pvals.join(',')}`);
         downloadAndSetupGraph(nodes, pvals);
-        return false;
-    });
-
-    $('#edgesep,#nodesep').change(() => {
-        cygraph.layout({
-            name: 'dagre',
-            rankDir: 'BT',
-            padding: 50,
-            randomize: true,
-            animate: true,
-            nodeSep: $('#nodesep').val(),
-            edgeSep: $('#edgesep').val(),
-        });
         return false;
     });
 }

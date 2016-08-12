@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta name="generator" content="HTML Tidy for HTML5 for Mac OS X version 5.2.0">
-  <title>Ontograph - basic view</title>
+  <title>Ontograph - enrichment widget</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
@@ -43,11 +43,61 @@
   </style>
 </head>
 <body>
+  <h1>Ontograph: An ontology viewer - enrichment widget</h1>
+  <form id="multi" action="" name="multi">
+    <label for="goterms">Submit two column tab separated file with terms and score:</label> 
+    <textarea id="goterms" cols="40" rows="10">GO:0034220  5.14820022241201e-131
+GO:0015992  5.14820022241201e-131
+GO:0009206  5.14820022241201e-131
+GO:0009145  5.14820022241201e-131
+GO:0006754  5.14820022241201e-131
+GO:0015985  5.14820022241201e-131
+GO:0015986  5.14820022241201e-131
+GO:0009201  5.14820022241201e-131
+GO:0009142  5.14820022241201e-131
+GO:0006414  5.14820022241201e-131
+GO:0006818  5.14820022241201e-131
+GO:0046034  5.14820022241201e-131
+GO:0009205  5.14820022241201e-131
+GO:0009144  5.14820022241201e-131
+GO:0009141  5.14820022241201e-131
+GO:0009199  5.14820022241201e-131
+GO:0055085  5.14820022241201e-131
+GO:0042273  1.03404365655219e-129
+GO:0042255  1.03404365655219e-129
+GO:0000027  1.03404365655219e-129
+GO:0042777  5.50161108174046e-118
+GO:0022618  8.50295413530387e-93
+GO:0042026  2.53469490430836e-89
+GO:0009208  2.8946403116483e-63
+GO:0009209  2.8946403116483e-63
+GO:0046051  2.8946403116483e-63
+GO:0006241  2.8946403116483e-63
+GO:0046036  2.8946403116483e-63
+GO:0006228  2.8946403116483e-63
+GO:0006183  2.8946403116483e-63
+GO:0006662  2.13886596489954e-62
+GO:0010608  1.4043787324419e-54
+GO:0006417  2.08428284258175e-52</textarea> <button type="submit">Submit</button>
+  </form>
   <button id="save_button">Save PNG</button>
   <div id="output"></div>
   <p id="loading"></p>
   <div id="legend"></div>
   <div id="cy"></div>
+  <a href="https://github.com/cmdcolin/ontograph">Github</a> 
+  <script type="text/javascript">
+  $(function() {
+      $("a.clink").click(function (evt) {
+          $("#term").val(evt.target.text);
+          $("#termform").submit();
+          return false;
+      });
+      $("#graphlayout").submit(function() {
+          return false;
+      });
+  });
+  </script> 
   <script src="index.js" type="text/javascript">
   </script> 
   <script type="text/javascript">
