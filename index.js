@@ -6,6 +6,7 @@ var dagre = require('dagre');
 var _ = require('underscore');
 var utils = require('./js/util');
 var chroma = require('chroma-js');
+var d3 = require('d3-request');
 
 
 var depthLimit = 20;
@@ -248,6 +249,7 @@ function downloadAndSetupGraph(term, pval) {
         } else if (checkterm.match(/^RO:/)) {
             newOntology = 'ro.json'; relationships = response.generic_relationships;
         }
+
         $('#legend').empty();
         relationships.forEach((elt) => {
             $('#legend').append(`<div style='height: 12px; width: 50px; background: ${scales(elt)}'></div><div>${elt}</div>`);
@@ -259,14 +261,6 @@ function downloadAndSetupGraph(term, pval) {
             $.ajax({ url: ontology, dataType: 'json' }).done((responseOntology) => {
                 ontologyGraph = responseOntology;
                 processGraph(ontologyGraph);
-                if (setup) {
-                    $('#search').autocomplete({ source: [] });
-                }
-                $('#search').autocomplete({
-                    source: _.keys(ontologyTerms),
-                });
-
-
                 setupGraph(ontologyGraph, term, pval);
                 $('#loading').text('');
             });
@@ -275,6 +269,18 @@ function downloadAndSetupGraph(term, pval) {
             $('#loading').text('');
         }
     });
+    d3.csv('output.csv',
+            (row) => row,
+            (data) => {
+                data.forEach((row) => {
+                    ontologyTerms[row.description] = row.value;
+                });
+                $('#search').autocomplete({
+                    source: _.keys(ontologyTerms),
+                    minLength: 3,
+                });
+            }
+    );
 }
 
 function setupEventHandlers() {

@@ -35,3 +35,8 @@ Note: The debug mode is currently required for cose-bilkent
 
 A demo is deployed live at http://cmdcolin.github.io/ontograph/
 
+## Perltidy
+
+Perl::Tidy is used experimentally for code style
+
+    perltidy -pro=.perltidyrc scripts/read-obo.pl

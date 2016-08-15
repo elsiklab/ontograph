@@ -1,3 +1,9 @@
+Version 0.3.3
+
+- Separate out single.html, enrichment.html, and index.html
+- Allow search description to search all ontologies at once
+- Added relationship ontology (RO)
+
 Version 0.3.2
 
 - Added "single.html" which does not include the various UI elements

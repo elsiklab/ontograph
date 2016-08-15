@@ -28,3 +28,16 @@ set -v
 [ -f dist/cell_ontology.json ] || scripts/read-obo.pl obo_files/cl-basic.obo > dist/cell_ontology.json
 [ -f dist/envo-basic.json ] || scripts/read-obo.pl obo_files/envo-basic.obo > dist/envo-basic.json
 [ -f dist/ro.json ] || scripts/read-obo.pl obo_files/ro.obo > dist/ro.json
+
+echo "term,value" > dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/ro.json >> dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/hp.json >> dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/envo-basic.json >> dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/evidence_ontology.json >> dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/chebi.json >> dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/cell_ontology.json >> dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/disease_ontology.json >> dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/sequence_ontology.json >> dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/plant_ontology.json >> dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/pato.json >> dist/output.csv
+jq -r '. | to_entries[] | [.key, .value.description] | @csv' < dist/gene_ontology.json >> dist/output.csv
