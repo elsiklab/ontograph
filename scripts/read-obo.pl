@@ -37,13 +37,13 @@ $graph->iterate(
                 $output->{description} = $ni->{term}->{name};
             }
             my $relationships = $graph->get_parent_relationships($ni->{term}->{acc});
-            foreach (@$relationships) {
-                if ($_->{type} && $_->{type} ne "is_a") {
-                    if (!$output->{$_->{type}}) {
-                        $output->{$_->{type}} = [];
+            foreach my $element (@$relationships) {
+                if ($element->{type} && $element->{type} ne "is_a") {
+                    if (!$output->{$element->{type}}) {
+                        $output->{$element->{type}} = [];
                     }
-                    push(@{$output->{$_->{type}}}, $_->{acc1})
-                      unless grep { $_ eq $_->{acc1} } @{$output->{$_->{type}}};
+                    my $ret = grep { $_ eq $element->{acc1} } @{$output->{$element->{type}}};
+                    push(@{$output->{$element->{type}}}, $element->{acc1}) unless $ret;
                 }
             }
 
