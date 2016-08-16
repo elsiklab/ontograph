@@ -14,11 +14,9 @@ var nodesCy = {};
 var edgesCy = {};
 var nodeScores = {};
 var relationships = [];
-var ontologyGraph;
-var ontology;
+var ontologyTerms = {};
 var setup;
 var cygraph;
-var ontologyTerms;
 
 
 var scales = (elt) => {
@@ -26,13 +24,6 @@ var scales = (elt) => {
     return elt === 'parents' ? '#333' : colorPalette[relationships.indexOf(elt) - 1];
 };
 
-function processGraph(graph) {
-    ontologyTerms = {};
-    _.keys(graph).forEach((key) => {
-        var node = graph[key];
-        ontologyTerms[node.description] = key;
-    });
-}
 
 function processParents(cy, graph, term, depth) {
     var node = graph[term];
@@ -214,7 +205,6 @@ function setupGraph(graph, term) {
 }
 
 function downloadAndSetupGraph(term, pval) {
-    var newOntology;
     var checkterm = term;
     if (!term) {
         return;
@@ -224,49 +214,44 @@ function downloadAndSetupGraph(term, pval) {
     }
     $('#loading').text('Loading...');
 
-
     $.ajax({ url: 'relationships.json', dataType: 'json' }).done((response) => {
+        var ontology;
         if (checkterm.match(/^ECO:/)) {
-            newOntology = 'evidence_ontology.json'; relationships = response.generic_relationships;
+            ontology = 'evidence_ontology.json'; relationships = response.generic_relationships;
         } else if (checkterm.match(/^GO:/)) {
-            newOntology = 'gene_ontology.json'; relationships = response.go_relationships;
+            ontology = 'gene_ontology.json'; relationships = response.go_relationships;
         } else if (checkterm.match(/^SO:/)) {
-            newOntology = 'sequence_ontology.json'; relationships = response.so_relationships;
+            ontology = 'sequence_ontology.json'; relationships = response.so_relationships;
         } else if (checkterm.match(/^CHEBI:/)) {
-            newOntology = 'chebi.json'; relationships = response.chebi_relationships;
+            ontology = 'chebi.json'; relationships = response.chebi_relationships;
         } else if (checkterm.match(/^HP:/)) {
-            newOntology = 'hp.json'; relationships = response.generic_relationships;
+            ontology = 'hp.json'; relationships = response.generic_relationships;
         } else if (checkterm.match(/^DOID:/)) {
-            newOntology = 'disease_ontology.json'; relationships = response.generic_relationships;
+            ontology = 'disease_ontology.json'; relationships = response.generic_relationships;
         } else if (checkterm.match(/^PO:/)) {
-            newOntology = 'plant_ontology.json'; relationships = response.po_relationships;
+            ontology = 'plant_ontology.json'; relationships = response.po_relationships;
         } else if (checkterm.match(/^PATO:/)) {
-            newOntology = 'pato.json'; relationships = response.pato_relationships;
+            ontology = 'pato.json'; relationships = response.pato_relationships;
         } else if (checkterm.match(/^CL:/)) {
-            newOntology = 'cell_ontology.json'; relationships = response.generic_relationships;
+            ontology = 'cell_ontology.json'; relationships = response.generic_relationships;
         } else if (checkterm.match(/^ENVO:/)) {
-            newOntology = 'envo-basic.json'; relationships = response.envo_relationships;
+            ontology = 'envo-basic.json'; relationships = response.envo_relationships;
         } else if (checkterm.match(/^RO:/)) {
-            newOntology = 'ro.json'; relationships = response.generic_relationships;
+            ontology = 'ro.json'; relationships = response.generic_relationships;
         }
 
         $('#legend').empty();
-        relationships.forEach((elt) => {
-            $('#legend').append(`<div style='height: 12px; width: 50px; background: ${scales(elt)}'></div><div>${elt}</div>`);
-        });
-        if (!newOntology) {
+
+        if (!ontology) {
             $('#loading').text(`Error: ontology not found for ${checkterm}`);
-        } else if (newOntology !== ontology) {
-            ontology = newOntology;
-            $.ajax({ url: ontology, dataType: 'json' }).done((responseOntology) => {
-                ontologyGraph = responseOntology;
-                processGraph(ontologyGraph);
-                setupGraph(ontologyGraph, term, pval);
+        } else {
+            relationships.forEach((elt) => {
+                $('#legend').append(`<div style='height: 12px; width: 50px; background: ${scales(elt)}'></div><div>${elt}</div>`);
+            });
+            $.ajax({ url: ontology, dataType: 'json' }).done((response) => {
+                setupGraph(response, term, pval);
                 $('#loading').text('');
             });
-        } else {
-            setupGraph(ontologyGraph, term);
-            $('#loading').text('');
         }
     });
     d3.csv('output.csv',
