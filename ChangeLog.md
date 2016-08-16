@@ -1,3 +1,8 @@
+Version 0.3.4
+
+- Fixup some strict mode warnings on perl
+- Fix ability to search multiple ontologies
+
 Version 0.3.3
 
 - Separate out single.html, enrichment.html, and index.html

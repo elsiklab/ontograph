@@ -258,7 +258,7 @@ function downloadAndSetupGraph(term, pval) {
             (row) => row,
             (data) => {
                 data.forEach((row) => {
-                    ontologyTerms[row.description] = row.value;
+                    ontologyTerms[row.value] = row.term;
                 });
                 $('#search').autocomplete({
                     source: _.keys(ontologyTerms),
