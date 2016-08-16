@@ -248,8 +248,8 @@ function downloadAndSetupGraph(term, pval) {
             relationships.forEach((elt) => {
                 $('#legend').append(`<div style='height: 12px; width: 50px; background: ${scales(elt)}'></div><div>${elt}</div>`);
             });
-            $.ajax({ url: ontology, dataType: 'json' }).done((response) => {
-                setupGraph(response, term, pval);
+            $.ajax({ url: ontology, dataType: 'json' }).done((res) => {
+                setupGraph(res, term, pval);
                 $('#loading').text('');
             });
         }
