@@ -9,13 +9,12 @@ var chroma = require('chroma-js');
 var d3 = require('d3-request');
 
 
-var depthLimit = 20;
+var depthLimit = 20; // hack to avoid cycles in graph
 var nodesCy = {};
 var edgesCy = {};
 var nodeScores = {};
 var relationships = [];
 var ontologyTerms = {};
-var setup;
 var cygraph;
 
 
@@ -126,11 +125,9 @@ function setupGraph(graph, term) {
                 width: 5,
             });
 
-    if (setup) {
-        nodesCy = {};
-        edgesCy = {};
-        cygraph.destroy();
-    }
+    nodesCy = {};
+    edgesCy = {};
+    if(cygraph) cygraph.destroy();
 
     if (_.isArray(term)) {
         _.each(term, (m) => {
@@ -172,8 +169,6 @@ function setupGraph(graph, term) {
     };
 
     cygraph.panzoom(defaults);
-
-    setup = true;
 
     cygraph.elements().qtip({
         content: function () { return `<b>${this.data('id')}</b><br />${this.data('label')}<br />${this.data('pval') ? `pval: ${this.data('pval')}` : ''}`; },
