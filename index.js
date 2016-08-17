@@ -204,7 +204,6 @@ function setupGraph(graph, term) {
 
 function downloadAndSetupGraph(term) {
     var checkterm = _.isArray(term) ? term[0] : term;
-    console.log( ontologyIds[term]);
 
     $('#search').val(ontologyIds[term]);
     $('#loading').text('Loading...');
@@ -249,7 +248,6 @@ function downloadAndSetupGraph(term) {
             });
         }
     });
-    
 }
 
 function setupEventHandlers() {
