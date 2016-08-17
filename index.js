@@ -15,6 +15,7 @@ var edgesCy = {};
 var nodeScores = {};
 var relationships = [];
 var ontologyTerms = {};
+var ontologyIds = {};
 var cygraph;
 
 
@@ -127,7 +128,9 @@ function setupGraph(graph, term) {
 
     nodesCy = {};
     edgesCy = {};
-    if(cygraph) cygraph.destroy();
+    if (cygraph) {
+        cygraph.destroy();
+    }
 
     if (_.isArray(term)) {
         _.each(term, (m) => {
@@ -199,14 +202,11 @@ function setupGraph(graph, term) {
     layoutCy.run();
 }
 
-function downloadAndSetupGraph(term, pval) {
-    var checkterm = term;
-    if (!term) {
-        return;
-    }
-    if (_.isArray(term)) {
-        checkterm = term[0];
-    }
+function downloadAndSetupGraph(term) {
+    var checkterm = _.isArray(term) ? term[0] : term;
+    console.log( ontologyIds[term]);
+
+    $('#search').val(ontologyIds[term]);
     $('#loading').text('Loading...');
 
     $.ajax({ url: 'relationships.json', dataType: 'json' }).done((response) => {
@@ -244,23 +244,12 @@ function downloadAndSetupGraph(term, pval) {
                 $('#legend').append(`<div style='height: 12px; width: 50px; background: ${scales(elt)}'></div><div>${elt}</div>`);
             });
             $.ajax({ url: ontology, dataType: 'json' }).done((res) => {
-                setupGraph(res, term, pval);
+                setupGraph(res, term);
                 $('#loading').text('');
             });
         }
     });
-    d3.csv('output.csv',
-            (row) => row,
-            (data) => {
-                data.forEach((row) => {
-                    ontologyTerms[row.value] = row.term;
-                });
-                $('#search').autocomplete({
-                    source: _.keys(ontologyTerms),
-                    minLength: 3,
-                });
-            }
-    );
+    
 }
 
 function setupEventHandlers() {
@@ -311,17 +300,15 @@ function setupEventHandlers() {
     $('#multi').submit(() => {
         var nodes = [];
         var pvals = [];
-        $('#goterms')
-            .val()
-            .split('\n')
-            .forEach((line) => {
-                var matches = line.split(/\s+/);
-                if (matches.length === 2) {
-                    nodes.push(matches[0]);
-                    pvals.push(matches[1]);
-                    nodeScores[matches[0]] = parseFloat(matches[1]);
-                }
-            });
+        var goterms = $('#goterms').val().split('\n');
+        goterms.forEach((line) => {
+            var matches = line.split(/\s+/);
+            if (matches.length === 2) {
+                nodes.push(matches[0]);
+                pvals.push(matches[1]);
+                nodeScores[matches[0]] = parseFloat(matches[1]);
+            }
+        });
         window.history.replaceState({}, '', `?terms=${nodes.join(',')}&pvals=${pvals.join(',')}`);
         downloadAndSetupGraph(nodes, pvals);
         return false;
@@ -329,34 +316,48 @@ function setupEventHandlers() {
 }
 
 $(() => {
+    d3.csv('output.csv',
+        (row) => row,
+        (data) => {
+            data.forEach((row) => {
+                ontologyTerms[row.value] = row.term;
+                ontologyIds[row.term] = row.value;
+            });
+            $('#search').autocomplete({
+                source: _.keys(ontologyTerms),
+                minLength: 3,
+            });
+
+            // Check query params
+            var terms = utils.getParameterByName('terms');
+            var pvals = utils.getParameterByName('pvals');
+            var term = utils.getParameterByName('term');
+
+            if (terms && pvals) {
+                terms = terms.split(',');
+                pvals = pvals.split(',');
+                var str = '';
+                if (terms.length === pvals.length) {
+                    for (var i = 0; i < terms.length; i++) {
+                        str += `${terms[i]}\t${pvals[i]}\n`;
+                        nodeScores[terms[i]] = parseFloat(pvals[i]);
+                    }
+                    $('#goterms').val(str);
+                }
+                downloadAndSetupGraph(terms, pvals);
+            } else if (term) {
+                $('#term').val(term);
+                downloadAndSetupGraph(term);
+            } else if ($('#term').val()) {
+                downloadAndSetupGraph($('#term').val());
+            }
+        }
+    );
     cydagre(cytoscape, dagre);
     cyqtip(cytoscape, $);
     cydagre(cytoscape, dagre);
     panzoom(cytoscape, $);
 
-    // Check query params
-    var terms = utils.getParameterByName('terms');
-    var pvals = utils.getParameterByName('pvals');
-    var term = utils.getParameterByName('term');
-
-    if (terms && pvals) {
-        terms = terms.split(',');
-        pvals = pvals.split(',');
-        var str = '';
-        if (terms.length === pvals.length) {
-            for (var i = 0; i < terms.length; i++) {
-                str += `${terms[i]}\t${pvals[i]}\n`;
-                nodeScores[terms[i]] = parseFloat(pvals[i]);
-            }
-            $('#goterms').val(str);
-        }
-        downloadAndSetupGraph(terms, pvals);
-    } else if (term) {
-        $('#term').val(term);
-        downloadAndSetupGraph(term);
-    } else if ($('#term').val()) {
-        downloadAndSetupGraph($('#term').val());
-    }
 
     setupEventHandlers();
 });
