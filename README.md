@@ -29,8 +29,6 @@ Build ontologies
 
     bin/build.sh
 
-Note: The debug mode is currently required for cose-bilkent
-
 ## Demo
 
 A demo is deployed live at http://elsiklab.github.io/ontograph/
