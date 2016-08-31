@@ -1,3 +1,4 @@
 node_modules
 *.obo
 *.cache
+dist/terms.csv
