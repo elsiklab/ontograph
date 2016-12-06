@@ -4,8 +4,8 @@ set -e
 set -u
 set -v
 [ -f obo_files/go.obo ] || wget -P obo_files http://purl.obolibrary.org/obo/go.obo
-[ -f obo_files/evidence_ontology.obo ] || wget -P obo_files https://raw.githubusercontent.com/evidenceontology/evidenceontology/master/evidence_ontology.obo
-[ -f obo_files/so-xp-simple.obo ] || wget -P obo_files https://raw.githubusercontent.com/The-Sequence-Ontology/SO-Ontologies/master/so-xp-simple.obo
+[ -f obo_files/evidence_ontology.obo ] || wget -P obo_files https://raw.githubusercontent.com/evidenceontology/evidenceontology/master/deprecated/evidence_ontology.obo
+[ -f obo_files/so-simple.obo ] || wget -P obo_files https://raw.githubusercontent.com/The-Sequence-Ontology/SO-Ontologies/master/so-simple.obo
 [ -f obo_files/chebi.obo ] || wget -P obo_files http://purl.obolibrary.org/obo/chebi.obo
 [ -f obo_files/hp.obo ] || wget -P obo_files http://purl.obolibrary.org/obo/hp.obo
 [ -f obo_files/doid.obo ] || wget -P obo_files http://www.berkeleybop.org/ontologies/doid.obo
@@ -19,7 +19,7 @@ set -v
 
 [ -f dist/gene_ontology.json ] || scripts/read-obo.pl obo_files/go.obo > dist/gene_ontology.json
 [ -f dist/evidence_ontology.json ] || scripts/read-obo.pl obo_files/evidence_ontology.obo > dist/evidence_ontology.json
-[ -f dist/sequence_ontology.json ] || scripts/read-obo.pl obo_files/so-xp-simple.obo > dist/sequence_ontology.json
+[ -f dist/sequence_ontology.json ] || scripts/read-obo.pl obo_files/so-simple.obo > dist/sequence_ontology.json
 [ -f dist/chebi.json ] || scripts/read-obo.pl obo_files/chebi.obo > dist/chebi.json
 [ -f dist/hp.json ] || scripts/read-obo.pl obo_files/hp.obo > dist/hp.json
 [ -f dist/disease_ontology.json ] || scripts/read-obo.pl obo_files/doid.obo > dist/disease_ontology.json
