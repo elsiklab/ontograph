@@ -6,8 +6,7 @@ var dagre = require('dagre');
 var _ = require('underscore');
 var utils = require('./js/util');
 var chroma = require('chroma-js');
-var d3 = require('d3-request');
-
+var d3 = require('d3-dsv');
 
 var depthLimit = 20; // hack to avoid cycles in graph
 var nodesCy = {};
@@ -100,31 +99,30 @@ function processParentsEdges(cy, graph, term, depth) {
 function setupGraph(graph, term) {
     var stylesheetCy = cytoscape.stylesheet()
         .selector('node')
-            .style({
-                content: 'data(label)',
-                'text-valign': 'center',
-                'background-color': (elt) => (elt.data('score') ? `hsl(${elt.data('score') / -Math.log(_.min(_.values(nodeScores)))}, 50%, 50%)` : '#fff'),
-                'border-color': '#333',
-                'border-width': 5,
-                shape: 'rectangle',
-                'text-max-width': '1000px',
-                'text-wrap': 'wrap',
-                width: 'label',
-                'padding-left': '9px',
-                'padding-bottom': '9px',
-                'padding-right': '9px',
-                'padding-top': '9px',
-                height: 'label',
-            })
+        .style({
+            content: 'data(label)',
+            'text-valign': 'center',
+            'background-color': elt => (elt.data('score') ? `hsl(${elt.data('score') / -Math.log(_.min(_.values(nodeScores)))}, 50%, 50%)` : '#fff'),
+            'border-color': '#333',
+            'border-width': 5,
+            shape: 'rectangle',
+            'text-max-width': '1000px',
+            'text-wrap': 'wrap',
+            width: 'label',
+            'padding-left': '9px',
+            'padding-bottom': '9px',
+            'padding-right': '9px',
+            'padding-top': '9px',
+            height: 'label',
+        })
         .selector('edge')
-            .css({
-                'target-arrow-fill': '#333',
-                'target-arrow-shape': 'triangle',
-                'curve-style': 'bezier',
-                'target-arrow-color': (elt) => scales(elt.data('label')),
-                'line-color': (elt) => scales(elt.data('label')),
-                width: 5,
-            });
+        .css({
+            'target-arrow-shape': 'triangle',
+            'curve-style': 'bezier',
+            'target-arrow-color': elt => scales(elt.data('label')),
+            'line-color': elt => scales(elt.data('label')),
+            width: 5,
+        });
 
     nodesCy = {};
     edgesCy = {};
@@ -259,31 +257,6 @@ function setupEventHandlers() {
         return false;
     });
 
-    $('#save_button').on('click', () => {
-        var png = cygraph.png({ scale: 2 });
-        var canvas = $('<canvas/>', { id: 'tmpcan' });
-        var ctx = canvas[0].getContext('2d');
-        var legendHTML = $('#legend').html();
-        var data = `
-            data:image/svg+xml,
-            <svg xmlns='http://www.w3.org/2000/svg' width='200' height='600'>
-                <foreignObject width='100%' height='100%'>
-                <div xmlns='http://www.w3.org/1999/xhtml' style='font-size:12px'>${legendHTML}</div>
-                </foreignObject>
-            </svg>
-        `;
-
-        var img = new Image();
-        img.src = png;
-        canvas[0].width = img.width + 400;
-        canvas[0].height = img.height;
-        ctx.drawImage(img, 400, 0);
-
-        img.src = data;
-        ctx.drawImage(img, 100, 100, img.width * 3, img.height * 3);
-        var dataURL = canvas[0].toDataURL('image/png');
-        $('#output').empty().append($('<a/>').attr({ href: dataURL }).append('Download picture'));
-    });
 
 
     $('#searchform').submit(() => {
@@ -314,43 +287,43 @@ function setupEventHandlers() {
 }
 
 $(() => {
-    d3.csv('output.csv',
-        (row) => row,
-        (data) => {
-            data.forEach((row) => {
-                ontologyTerms[row.value] = row.term;
-                ontologyIds[row.term] = row.value;
-            });
-            $('#search').autocomplete({
-                source: _.keys(ontologyTerms),
-                minLength: 3,
-            });
+    fetch('output.csv').then(function (res) {
+        return res.text();
+    }).then(function (res) {
+        var data = d3.csvParse(res, function (row) { return row; });
+        data.forEach((row) => {
+            ontologyTerms[row.value] = row.term;
+            ontologyIds[row.term] = row.value;
+        });
+        $('#search').autocomplete({
+            source: _.keys(ontologyTerms),
+            minLength: 3,
+        });
 
-            // Check query params
-            var terms = utils.getParameterByName('terms');
-            var pvals = utils.getParameterByName('pvals');
-            var term = utils.getParameterByName('term');
+        // Check query params
+        var terms = utils.getParameterByName('terms');
+        var pvals = utils.getParameterByName('pvals');
+        var term = utils.getParameterByName('term');
 
-            if (terms && pvals) {
-                terms = terms.split(',');
-                pvals = pvals.split(',');
-                var str = '';
-                if (terms.length === pvals.length) {
-                    for (var i = 0; i < terms.length; i++) {
-                        str += `${terms[i]}\t${pvals[i]}\n`;
-                        nodeScores[terms[i]] = parseFloat(pvals[i]);
-                    }
-                    $('#goterms').val(str);
+        if (terms && pvals) {
+            terms = terms.split(',');
+            pvals = pvals.split(',');
+            var str = '';
+            if (terms.length === pvals.length) {
+                for (var i = 0; i < terms.length; i++) {
+                    str += `${terms[i]}\t${pvals[i]}\n`;
+                    nodeScores[terms[i]] = parseFloat(pvals[i]);
                 }
-                downloadAndSetupGraph(terms, pvals);
-            } else if (term) {
-                $('#term').val(term);
-                downloadAndSetupGraph(term);
-            } else if ($('#term').val()) {
-                downloadAndSetupGraph($('#term').val());
+                $('#goterms').val(str);
             }
+            downloadAndSetupGraph(terms, pvals);
+        } else if (term) {
+            $('#term').val(term);
+            downloadAndSetupGraph(term);
+        } else if ($('#term').val()) {
+            downloadAndSetupGraph($('#term').val());
         }
-    );
+    });
     cydagre(cytoscape, dagre);
     cyqtip(cytoscape, $);
     cydagre(cytoscape, dagre);
